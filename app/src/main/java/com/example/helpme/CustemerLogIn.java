@@ -10,5 +10,6 @@ public class CustemerLogIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custemer_log_in);
+        //dfgf
     }
 }
