@@ -31,7 +31,7 @@ public class StartActivity extends AppCompatActivity {
         customerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(StartActivity.this,CustomerLogIn.class);
+                Intent intent=new Intent(StartActivity.this, CustomerLogIn.class);
                 startActivity(intent);
             }
         });
@@ -49,7 +49,8 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
+
+
+
 }

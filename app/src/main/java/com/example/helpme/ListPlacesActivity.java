@@ -56,6 +56,8 @@ public class ListPlacesActivity extends AppCompatActivity {
 
     }
 
+
+    //check this situation because if i click on two item both of them will be in Color.CYAN
     private void choosePlace() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -74,6 +76,7 @@ public class ListPlacesActivity extends AppCompatActivity {
                 Intent intent = new Intent(ListPlacesActivity.this, CustomerMain.class);
                 intent.putExtra(CUSTOMER_NAME, nameEditText.getText().toString());
                 startActivity(intent);
+                finish();
             }
         });
 

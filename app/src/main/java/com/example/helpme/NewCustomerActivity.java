@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,64 +24,60 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-public class CustomerLogIn extends AppCompatActivity {
-    private final String TAG="CustomerLogIn";
-    private Button loginBtn;
-    private TextView createAccount;
+public class NewCustomerActivity extends AppCompatActivity {
+    private final String TAG="NewCustomerActivity";
+    private final String VERIFY_CODE="Verify Code";
+    private Button send_verification_code_btn;
+    private Button verify_code_btn;
     private EditText cellPhoneNumber;
+    private EditText verifyEditText;
     private EditText prefix;
     private ProgressBar progress_bar_phone_num;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks;
     private FirebaseAuth mFireBaseAuth;
     private String mVerificationId;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks;
-
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_log_in);
+        setContentView(R.layout.activity_new_customer);
 
-        mFireBaseAuth= FirebaseAuth.getInstance();
+        //init FireBase
+        mFireBaseAuth=FirebaseAuth.getInstance();
         mFireBaseAuth.setLanguageCode("fr");
         initViews();
         init_mCallBacks();
         buttonListeners();
+
+
     }
-    private void initViews() {
-        loginBtn=(Button)findViewById(R.id.loginBtn);
+
+
+
+    private void initViews(){
+        send_verification_code_btn=(Button)findViewById(R.id.send_verification_code_btn);
+        verify_code_btn=(Button)findViewById(R.id.verify_code_btn);
+        verify_code_btn.setEnabled(false);
+        verify_code_btn.setVisibility(View.INVISIBLE);
+        verifyEditText=(EditText)findViewById(R.id.verify_edit_text);
+        verifyEditText.setVisibility(View.INVISIBLE);
         prefix=(EditText)findViewById(R.id.prefix);
         cellPhoneNumber=(EditText)findViewById(R.id.phone_num);
         progress_bar_phone_num=(ProgressBar)findViewById(R.id.progress_bar_phone_num);
         progress_bar_phone_num.setVisibility(View.INVISIBLE);
-        createAccount=(TextView)findViewById(R.id.create_account);
-    }
-
-
-    private void buttonListeners() {
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logIn();
-            }
-        });
-
-        createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(CustomerLogIn.this,NewCustomerActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
 
     }
 
-    private void init_mCallBacks() {
+
+    private void init_mCallBacks(){
         mCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
+
                 signInWithPhoneAuthCredential(credential);
+
+
             }
 
             @Override
@@ -99,26 +94,64 @@ public class CustomerLogIn extends AppCompatActivity {
                 }
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId;
+                verifyEditText.setVisibility(View.VISIBLE);
+                send_verification_code_btn.setVisibility(View.INVISIBLE);
+                send_verification_code_btn.setEnabled(false);
+                verify_code_btn.setVisibility(View.VISIBLE);
+                verify_code_btn.setEnabled(true);
+
             }
         };
     }
-    private void logIn(){
+
+
+
+    private void buttonListeners(){
+
+        send_verification_code_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sendVerificationCode();
+                }
+            });
+
+        verify_code_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                verifySignIn();
+            }
+        });
+
+    }
+
+
+
+
+    private void sendVerificationCode(){
         if ((prefix.getText().toString() + cellPhoneNumber.getText().toString()).length() >= 10) {
             cellPhoneNumber.setEnabled(false);
             prefix.setEnabled(false);
             progress_bar_phone_num.setVisibility(View.VISIBLE);
+            Log.d(TAG, "sendVerificationCode: immmhereee");
             String cellPhoneNum = prefix.getText().toString() + cellPhoneNumber.getText().toString();
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
                     cellPhoneNum,        // Phone number to verify
                     60,                 // Timeout duration
                     TimeUnit.SECONDS,   // Unit of timeout
-                    CustomerLogIn.this,               // Activity (for callback binding)
+                    NewCustomerActivity.this,               // Activity (for callback binding)
                     mCallBacks);        // OnVerificationStateChangedCallbacks/
 
         } else if ((prefix.getText().toString() + cellPhoneNumber.getText().toString()).length() < 10) {
             cellPhoneNumber.setError("Please enter your cellPhone number");
             cellPhoneNumber.requestFocus();
         }
+    }
+
+
+    private void verifySignIn(){
+        String code = verifyEditText.getText().toString();
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+        signInWithPhoneAuthCredential(credential);
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -131,9 +164,9 @@ public class CustomerLogIn extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
 
-                            Toast.makeText(CustomerLogIn.this,
+                            Toast.makeText(NewCustomerActivity.this,
                                     "Login Successful", Toast.LENGTH_LONG).show();
-                            Intent intent=new Intent(CustomerLogIn.this,ListPlacesActivity.class);
+                            Intent intent=new Intent(NewCustomerActivity.this,ListPlacesActivity.class);
                             startActivity(intent);
                             finish();
                             // ...

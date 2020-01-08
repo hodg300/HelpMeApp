@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListPlacesActivity"></activity>
+        <activity android:name=".CustomerLogIn"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
+        <activity
+            android:name=".ListPlacesActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".About"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
@@ -20,7 +24,7 @@
             android:name=".WorkerMain"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".CustomerLogIn"
+            android:name=".NewCustomerActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".CustomerMain"
