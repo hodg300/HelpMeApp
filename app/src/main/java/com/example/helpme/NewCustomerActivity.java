@@ -37,6 +37,7 @@ public class NewCustomerActivity extends AppCompatActivity {
     private FirebaseAuth mFireBaseAuth;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
+    private String phoneNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,13 +127,13 @@ public class NewCustomerActivity extends AppCompatActivity {
 
 
 
-
+    //if i connect with exists account , i want to make error and say that is user already exists-------check it------
     private void sendVerificationCode(){
-        if ((prefix.getText().toString() + cellPhoneNumber.getText().toString()).length() >= 10) {
+        phoneNumber=(prefix.getText().toString() + cellPhoneNumber.getText().toString());
+        if ( phoneNumber.length()>= 10) {
             cellPhoneNumber.setEnabled(false);
             prefix.setEnabled(false);
             progress_bar_phone_num.setVisibility(View.VISIBLE);
-            Log.d(TAG, "sendVerificationCode: immmhereee");
             String cellPhoneNum = prefix.getText().toString() + cellPhoneNumber.getText().toString();
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
                     cellPhoneNum,        // Phone number to verify
@@ -141,7 +142,7 @@ public class NewCustomerActivity extends AppCompatActivity {
                     NewCustomerActivity.this,               // Activity (for callback binding)
                     mCallBacks);        // OnVerificationStateChangedCallbacks/
 
-        } else if ((prefix.getText().toString() + cellPhoneNumber.getText().toString()).length() < 10) {
+        } else if (phoneNumber.length() < 10) {
             cellPhoneNumber.setError("Please enter your cellPhone number");
             cellPhoneNumber.requestFocus();
         }

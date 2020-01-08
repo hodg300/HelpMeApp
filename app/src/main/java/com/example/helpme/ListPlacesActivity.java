@@ -57,7 +57,7 @@ public class ListPlacesActivity extends AppCompatActivity {
     }
 
 
-    //check this situation because if i click on two item both of them will be in Color.CYAN
+    //check this situation because if i click on two item both of them will be in Color.CYAN---------------------------------
     private void choosePlace() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
