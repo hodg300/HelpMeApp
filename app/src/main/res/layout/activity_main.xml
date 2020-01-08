@@ -6,15 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/appback"
-    tools:context=".MainActivity">
+    tools:context=".StartActivity">
 
     <TextView
         android:id="@+id/Title"
         android:layout_width="match_parent"
         android:layout_height="96dp"
         android:background="#E1E3EC"
-        android:text="Help-Me!"
-        android:layout_marginTop="50dp"
+        android:text="HelpMe"
         android:textAlignment="center"
         android:textSize="45dp"
         android:textStyle="bold|normal"
@@ -30,8 +29,7 @@
         android:textColor="@android:color/white"
         android:background="@color/colorPrimaryDark"
         android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:layout_above="@id/workerBTN"
+        android:layout_centerHorizontal="true"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -39,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_below="@id/customerBTN"
         android:background="@color/colorAccent"
         android:text="WORKER"
         android:layout_marginTop="10dp"

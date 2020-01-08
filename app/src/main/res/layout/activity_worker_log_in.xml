@@ -12,8 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:background="#E1E3EC"
-            android:text="Help-Me!"
-            android:layout_marginTop="50dp"
+            android:text="HelpMe"
             android:textAlignment="center"
             android:textSize="45dp"
             android:textStyle="bold|normal"
@@ -26,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_above="@id/conectBTN"
             android:layout_below="@id/TitleCusLog"
             android:layout_centerInParent="true">
 

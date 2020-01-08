@@ -1,9 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CustomerMain">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/TitleCusLog"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="#E1E3EC"
+        android:text="HelpMe"
+        android:textAlignment="center"
+        android:textSize="45dp"
+        android:textStyle="bold|normal"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="60dp" />
+
+    <TextView
+        android:id="@+id/name_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello"
+        android:layout_below="@id/TitleCusLog"
+        android:textSize="30dp"
+        android:layout_centerInParent="true"/>
+
+        <Button
+            android:id="@+id/cameraBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Take a photo"/>
+
+        <ImageView
+            android:id="@+id/photo_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_above="@id/sendBTN"
+            android:layout_below="@id/name_textView"/>
+
+        <ImageView
+            android:id="@+id/sendBTN"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/send"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            />
+
+
+
+
+</RelativeLayout>

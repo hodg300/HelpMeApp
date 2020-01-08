@@ -5,15 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CustemerLogIn">
+    tools:context=".CustomerLogIn">
 
     <TextView
         android:id="@+id/TitleCusLog"
         android:layout_width="match_parent"
         android:layout_height="96dp"
         android:background="#E1E3EC"
-        android:text="Help-Me!"
-        android:layout_marginTop="50dp"
+        android:text="HelpMe"
         android:textAlignment="center"
         android:textSize="45dp"
         android:textStyle="bold|normal"
@@ -22,11 +21,11 @@
         tools:layout_editor_absoluteY="60dp" />
 
     <LinearLayout
-        android:id="@+id/LinearCusLog"
+        android:id="@+id/LinearCusLogIn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_above="@id/conectBTN"
+        android:layout_above="@id/customerConnectBTN"
         android:layout_below="@id/TitleCusLog"
         android:layout_centerInParent="true">
 
@@ -35,6 +34,7 @@
         android:layout_width="327dp"
         android:layout_height="66dp"
         android:layout_below="@id/TitleCusLog"
+        android:background="@drawable/edit_round"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:hint="Enter Your Name"
@@ -42,29 +42,35 @@
         android:shadowColor="@android:color/white"
         android:textAlignment="center"
         android:textSize="30dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
         <TextView
+            android:id="@+id/choose_place_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Choose your place"
+            android:layout_marginTop="10dp"
             android:textSize="30dp"
-            android:textAlignment="center"></TextView>
+            android:textAlignment="center"/>
 
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            ></ListView>
+            android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/costomerConnectBTN"
-        android:layout_width="match_parent"
+        android:id="@+id/customerConnectBTN"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button_round"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:text="CONNECT" />
 
