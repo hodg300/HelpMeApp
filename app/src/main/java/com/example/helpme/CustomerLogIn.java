@@ -61,7 +61,7 @@ public class CustomerLogIn extends AppCompatActivity {
                 nameOfChosePlace = listView.getItemAtPosition(position).toString();
                 view.setBackgroundColor(Color.CYAN);
                 isChoosePlace=true;
-                Log.d("test", "onItemClick: " + nameOfChosePlace);
+//                Log.d("test", "onItemClick: " + nameOfChosePlace);
             }
         });
     }
