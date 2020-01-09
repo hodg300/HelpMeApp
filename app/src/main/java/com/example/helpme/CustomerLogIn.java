@@ -119,7 +119,7 @@ public class CustomerLogIn extends AppCompatActivity {
                             FirebaseUser user = task.getResult().getUser();
 
                             Toast.makeText(CustomerLogIn.this,
-                                    "Login Successful", Toast.LENGTH_LONG).show();
+                                    "Code verification and login succeeded", Toast.LENGTH_LONG).show();
                             Intent intent=new Intent(CustomerLogIn.this,ListPlacesActivity.class);
                             startActivity(intent);
                             finish();
