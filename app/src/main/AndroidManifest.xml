@@ -24,9 +24,6 @@
             android:name=".WorkerMain"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".NewCustomerActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
             android:name=".CustomerMain"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity

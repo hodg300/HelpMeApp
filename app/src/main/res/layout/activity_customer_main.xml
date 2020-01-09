@@ -43,13 +43,17 @@
             android:layout_above="@id/sendBTN"
             android:layout_below="@id/name_textView"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/sendBTN"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send photo"
+            android:textSize="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:textStyle="bold|normal"
+            android:textColor="@android:color/holo_blue_dark"
             />
 
 

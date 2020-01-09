@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,7 +21,7 @@ public class CustomerMain extends AppCompatActivity {
     private final String Hi="Hi ";
     private final String CUSTOMER_NAME="customerName";
     private Button cameraBtn;
-    private ImageView sendBtn;
+    private TextView sendBtn;
     private ImageView returnPhoto;
     private TextView name;
     private boolean photoExists=false;
@@ -38,7 +39,7 @@ public class CustomerMain extends AppCompatActivity {
 
     private void initViews(){
         cameraBtn =(Button)findViewById(R.id.cameraBTN);
-        sendBtn   =(ImageView)findViewById(R.id.sendBTN);
+        sendBtn   =(TextView)findViewById(R.id.sendBTN);
         returnPhoto=(ImageView)findViewById(R.id.photo_image_view);
         name=(TextView)findViewById(R.id.name_textView);
     }
@@ -75,9 +76,20 @@ public class CustomerMain extends AppCompatActivity {
     //func for camera activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap=(Bitmap)data.getExtras().get("data");
-        returnPhoto.setImageBitmap(bitmap);
-        photoExists=true;
+        if(data!=null) {
+            super.onActivityResult(requestCode, resultCode, data);
+            Bitmap bitmap=(Bitmap)data.getExtras().get("data");
+            returnPhoto.setImageBitmap(bitmap);
+            photoExists = true;
+        }else{
+            Intent intent=new Intent(this,CustomerMain.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

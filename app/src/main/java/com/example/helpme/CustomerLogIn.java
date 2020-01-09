@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 public class CustomerLogIn extends AppCompatActivity {
     private final String TAG="CustomerLogIn";
     private Button loginBtn;
-    private TextView createAccount;
     private EditText cellPhoneNumber;
     private EditText prefix;
     private ProgressBar progress_bar_phone_num;
@@ -42,7 +41,6 @@ public class CustomerLogIn extends AppCompatActivity {
         setContentView(R.layout.activity_customer_log_in);
 
         mFireBaseAuth= FirebaseAuth.getInstance();
-        mFireBaseAuth.setLanguageCode("fr");
         initViews();
         init_mCallBacks();
         buttonListeners();
@@ -53,7 +51,7 @@ public class CustomerLogIn extends AppCompatActivity {
         cellPhoneNumber=(EditText)findViewById(R.id.phone_num);
         progress_bar_phone_num=(ProgressBar)findViewById(R.id.progress_bar_phone_num);
         progress_bar_phone_num.setVisibility(View.INVISIBLE);
-        createAccount=(TextView)findViewById(R.id.create_account);
+
     }
 
 
@@ -64,17 +62,6 @@ public class CustomerLogIn extends AppCompatActivity {
                 logIn();
             }
         });
-
-        createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(CustomerLogIn.this,NewCustomerActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
     }
 
     private void init_mCallBacks() {

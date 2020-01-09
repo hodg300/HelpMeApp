@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ListPlacesActivity extends AppCompatActivity {
     private final String CUSTOMER_NAME="customerName";
@@ -45,23 +48,29 @@ public class ListPlacesActivity extends AppCompatActivity {
         listView=(ListView)findViewById(R.id.listView);
         createListViews();
     }
+
     private void createListViews() {
         ArrayList<String> arrayList=new ArrayList<>();
         arrayList.add("Renuar");
         arrayList.add("Castro");
         arrayList.add("Zara");
+        arrayList.add("Bershka");
+        arrayList.add("Billabong");
+        arrayList.add("Adidas");
+        arrayList.add("Nike");
+        Collections.sort(arrayList);
         ArrayAdapter arrayAdapter=
                 new ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList);
         listView.setAdapter(arrayAdapter);
 
     }
 
-
-    //check this situation because if i click on two item both of them will be in Color.CYAN---------------------------------
+    //choose place
     private void choosePlace() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                clearBackgroundItems();
                 nameOfChosePlace = listView.getItemAtPosition(position).toString();
                 view.setBackgroundColor(Color.CYAN);
                 isChoosePlace=true;
@@ -69,18 +78,32 @@ public class ListPlacesActivity extends AppCompatActivity {
         });
     }
 
-    private void connectAndStartListPlacesActivity(){
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListPlacesActivity.this, CustomerMain.class);
-                intent.putExtra(CUSTOMER_NAME, nameEditText.getText().toString());
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
+    //clear all places that sign before
+    private void clearBackgroundItems(){
+        for(View v:listView.getTouchables()){
+            v.setBackgroundColor(Color.WHITE);
+        }
     }
 
+    private void connectAndStartListPlacesActivity(){
+            confirmBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(isChoosePlace) {
+                    Intent intent = new Intent(ListPlacesActivity.this, CustomerMain.class);
+                    intent.putExtra(CUSTOMER_NAME, nameEditText.getText().toString());
+                    intent.putExtra(NAME_OF_PLACE, nameOfChosePlace);
+                    startActivity(intent);
+                    }else{
+                        Toast.makeText(ListPlacesActivity.this,
+                                "You must choose one place", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+    }
+
+    @Override
+    public void onBackPressed() {
+        //no action
+    }
 }
