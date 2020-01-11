@@ -41,6 +41,7 @@
         android:background="@color/colorAccent"
         android:text="WORKER"
         android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"
         tools:ignore="MissingConstraints" />
 
@@ -53,6 +54,7 @@
         android:text="ABOUT"
         android:layout_below="@id/workerBTN"
         android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
         tools:ignore="MissingConstraints"
         android:layout_marginTop="10dp" />
 
