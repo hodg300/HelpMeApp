@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,17 +40,23 @@ public class CustomerLogIn extends AppCompatActivity {
     private FirebaseAuth mFireBaseAuth;
     private String mVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks;
+    private String completeNum;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_log_in);
 
-        mFireBaseAuth= FirebaseAuth.getInstance();
+
+
         initViews();
         init_mCallBacks();
         buttonListeners();
     }
+
+
+
     private void initViews() {
         loginBtn=(Button)findViewById(R.id.loginBtn);
         prefix=(EditText)findViewById(R.id.prefix);
@@ -70,6 +82,7 @@ public class CustomerLogIn extends AppCompatActivity {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
                 signInWithPhoneAuthCredential(credential);
+
             }
 
             @Override
@@ -85,12 +98,30 @@ public class CustomerLogIn extends AppCompatActivity {
                     progress_bar_phone_num.setVisibility(View.INVISIBLE);
                 }
                 // Save verification ID and resending token so we can use them later
-                mVerificationId = verificationId;
+//                mVerificationId = verificationId;
             }
         };
     }
+
+
     private void logIn(){
-        if ((prefix.getText().toString() + cellPhoneNumber.getText().toString()).length() >= 10) {
+    if(!cellPhoneNumber.getText().toString().matches("") && !prefix.getText().toString().matches("")) {
+        if (cellPhoneNumber.getText().toString().charAt(0) == '0') {
+            completeNum = prefix.getText().toString() + cellPhoneNumber.getText().toString().substring(1);
+        } else {
+            completeNum = prefix.getText().toString() + cellPhoneNumber.getText().toString();
+        }
+        if (prefix.getText().charAt(0) != '+') {
+            prefix.setError("it must to start with +");
+            prefix.requestFocus();
+        }
+        if (prefix.getText().toString().substring(1).length() < 1) {
+            prefix.setError("invalid prefix");
+            prefix.requestFocus();
+        }
+        if (completeNum.length() >= 10) {
+            addNumberToDatabase();
+            Log.d(TAG, "logIn: " + completeNum);
             cellPhoneNumber.setEnabled(false);
             prefix.setEnabled(false);
             progress_bar_phone_num.setVisibility(View.VISIBLE);
@@ -102,11 +133,22 @@ public class CustomerLogIn extends AppCompatActivity {
                     CustomerLogIn.this,               // Activity (for callback binding)
                     mCallBacks);        // OnVerificationStateChangedCallbacks/
 
-        } else if ((prefix.getText().toString() + cellPhoneNumber.getText().toString()).length() < 10) {
-            cellPhoneNumber.setError("Please enter your cellPhone number");
+        } else if (cellPhoneNumber.getText().length() < 10) {
+            cellPhoneNumber.setError("Check your cellPhone number");
             cellPhoneNumber.requestFocus();
         }
+    }else if(cellPhoneNumber.getText().toString().matches("")){
+            cellPhoneNumber.setError("Check your cellPhone number");
+            cellPhoneNumber.requestFocus();
+    }else if(prefix.getText().toString().matches(""))
+        prefix.setError("Check your prefix number");
+        prefix.requestFocus();
     }
+
+    private void addNumberToDatabase(){
+        mDatabaseReference.setValue(completeNum);
+    }
+
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mFireBaseAuth.signInWithCredential(credential)
@@ -135,4 +177,43 @@ public class CustomerLogIn extends AppCompatActivity {
                 });
     }
 
+
+    private void initFirebase(){
+        mFireBaseAuth= FirebaseAuth.getInstance();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("cellPhone");
+    }
+
+    private void userExists(){
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                if(dataSnapshot.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
+                    Toast.makeText(getApplicationContext(),
+                            "User exists...login succeeded", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initFirebase();
+//        userExists();
+
+    }
 }
