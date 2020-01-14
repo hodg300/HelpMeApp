@@ -33,7 +33,6 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initViews();
         startIntents();
 
@@ -87,8 +86,10 @@ public class StartActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                if(dataSnapshot.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
-                    userExists=true;
+                for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
+                    if (mDataSnapshot1.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
+                        userExists = true;
+                    }
                 }
             }
 
@@ -104,6 +105,6 @@ public class StartActivity extends AppCompatActivity {
         super.onStart();
         initFirebase();
         ///---------------------active this after we finish----- this method check if user exists----------
-//        userExists();
+        userExists();
     }
 }
