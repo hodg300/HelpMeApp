@@ -212,17 +212,18 @@ public class CustomerLogIn extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                boolean foundUser=false;
-                for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
-                    if (mDataSnapshot1.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
-                        foundUser = true;
+                if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+                    boolean foundUser = false;
+                    for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
+                        if (mDataSnapshot1.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
+                            foundUser = true;
+                        }
+                    }
+                    if (foundUser) {
+                        Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
+                        startActivity(intent);
                     }
                 }
-                if(foundUser) {
-                    Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
-                    startActivity(intent);
-                }
-
             }
 
             @Override

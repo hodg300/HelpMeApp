@@ -27,6 +27,7 @@ public class StartActivity extends AppCompatActivity {
     private Button customerBtn;
     private Button workerBtn;
     private Button aboutBtn;
+    private FirebaseAuth mFireBaseAuth;
     private DatabaseReference mDatabaseReference;
     private boolean userExists=false;
     @Override
@@ -76,7 +77,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void initFirebase(){
-
+        mFireBaseAuth= FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference("cellPhone");
     }
 
@@ -86,9 +87,11 @@ public class StartActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
-                    if (mDataSnapshot1.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
-                        userExists = true;
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
+                        if (mDataSnapshot1.getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())) {
+                            userExists = true;
+                        }
                     }
                 }
             }
