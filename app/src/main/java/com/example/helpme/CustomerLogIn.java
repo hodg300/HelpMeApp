@@ -220,6 +220,8 @@ public class CustomerLogIn extends AppCompatActivity {
                         }
                     }
                     if (foundUser) {
+                        Toast.makeText(getApplicationContext(),
+                                "User exists...login succeeded", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
                         startActivity(intent);
                     }
