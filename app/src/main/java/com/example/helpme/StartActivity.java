@@ -28,18 +28,34 @@ public class StartActivity extends AppCompatActivity {
     private Button customerBtn;
     private Button workerBtn;
     private Button aboutBtn;
+    public static PlaceFactory places;
     private FirebaseAuth mFireBaseAuth;
     private DatabaseReference mDatabaseReference;
+    private DatabaseReference mDatabaseReferencePlaces;
     private boolean userExists=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        initPlaces();
         startIntents();
 
 
     }
+
+    private void initPlaces() {
+        places = new PlaceFactory();
+        places.addPlace(new Place("Renuar",12345));
+        places.addPlace(new Place("Castro",234234));
+        places.addPlace(new Place("Zara",17556));
+        places.addPlace(new Place("Bershka",78978));
+        places.addPlace(new Place("Billabong",8954));
+        places.addPlace(new Place("Adidas",99654));
+        places.addPlace(new Place("Nike",8654));
+        places.sortPlaces();
+    }
+
     private void initViews(){
         customerBtn=(Button)findViewById(R.id.customerBTN);
         workerBtn=(Button)findViewById(R.id.workerBTN);
@@ -81,7 +97,11 @@ public class StartActivity extends AppCompatActivity {
     private void initFirebase(){
         mFireBaseAuth= FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference("cellPhone");
+        mDatabaseReferencePlaces= FirebaseDatabase.getInstance().getReference("places");
     }
+//    private void addPlacesToDatabase(){
+//        mDatabaseReferencePlaces.
+//    }
 
     private void userExists(){
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -111,5 +131,7 @@ public class StartActivity extends AppCompatActivity {
         initFirebase();
         ///---------------------active this after we finish----- this method check if user exists----------
         userExists();
+//        addPlacesToDatabase();
+
     }
 }

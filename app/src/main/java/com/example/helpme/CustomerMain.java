@@ -18,12 +18,17 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 public class CustomerMain extends AppCompatActivity {
-    private final String Hi="Hi ";
+    private final String HI="Hi ";
+    private final String PLACE="Place: ";
     private final String CUSTOMER_NAME="customerName";
+    private final String NAME_OF_PLACE="nameOfPlace";
     private Button cameraBtn;
     private TextView sendBtn;
     private ImageView returnPhoto;
     private TextView name;
+    private TextView place;
+    private String intentName;
+    private String intentPlace;
     private boolean photoExists=false;
 
     @Override
@@ -31,7 +36,7 @@ public class CustomerMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main);
         initViews();
-        getNameFromCustomerMain();
+        getNameAndStoreFromCustomerMain();
         clickToTakeAPhoto();
         sendAlertToWorker();
     }
@@ -42,9 +47,13 @@ public class CustomerMain extends AppCompatActivity {
         sendBtn   =(TextView)findViewById(R.id.sendBTN);
         returnPhoto=(ImageView)findViewById(R.id.photo_image_view);
         name=(TextView)findViewById(R.id.name_textView);
+        place=(TextView)findViewById(R.id.place_name_textView);
     }
-    private void getNameFromCustomerMain(){
-        name.setText(Hi + getIntent().getStringExtra(CUSTOMER_NAME));
+    private void getNameAndStoreFromCustomerMain(){
+        intentName=getIntent().getStringExtra(CUSTOMER_NAME);
+        intentPlace=getIntent().getStringExtra(NAME_OF_PLACE);
+        name.setText(HI + intentName);
+        place.setText(PLACE + intentPlace);
     }
 
     private void clickToTakeAPhoto(){
@@ -64,6 +73,7 @@ public class CustomerMain extends AppCompatActivity {
                     if(photoExists) {
                         Toast.makeText(CustomerMain.this,
                                 "Your request has been sent", Toast.LENGTH_SHORT).show();
+                        //here enter cloud messaging
                     }else{
                         Toast.makeText(CustomerMain.this,
                                 "You must take a photo", Toast.LENGTH_SHORT).show();

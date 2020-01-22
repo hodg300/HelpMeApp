@@ -27,6 +27,13 @@
         android:layout_below="@id/TitleCusLog"
         android:textSize="30dp"
         android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/place_name_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_textView"
+        android:layout_centerInParent="true"/>
+
 
         <Button
             android:id="@+id/cameraBTN"

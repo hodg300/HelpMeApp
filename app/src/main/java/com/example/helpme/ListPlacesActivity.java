@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ListPlacesActivity extends AppCompatActivity {
     private final String CUSTOMER_NAME="customerName";
@@ -31,6 +33,8 @@ public class ListPlacesActivity extends AppCompatActivity {
     private boolean isChoosePlace=false;
     private TextView nameEditText;
     private ImageView confirmBtn;
+
+    private Map<Integer,String> placeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +54,9 @@ public class ListPlacesActivity extends AppCompatActivity {
     }
 
     private void createListViews() {
-        ArrayList<String> arrayList=new ArrayList<>();
-        arrayList.add("Renuar");
-        arrayList.add("Castro");
-        arrayList.add("Zara");
-        arrayList.add("Bershka");
-        arrayList.add("Billabong");
-        arrayList.add("Adidas");
-        arrayList.add("Nike");
-        Collections.sort(arrayList);
         ArrayAdapter arrayAdapter=
-                new ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList);
+                new ArrayAdapter(this,android.R.layout.simple_list_item_1,StartActivity.places.returnNames());
         listView.setAdapter(arrayAdapter);
-
     }
 
     //choose place
