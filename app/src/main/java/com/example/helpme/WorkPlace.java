@@ -1,6 +1,7 @@
 package com.example.helpme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.graphics.drawable.BitmapDrawable;
@@ -50,14 +51,14 @@ public class WorkPlace implements Comparable {
         numOfWorkers--;
     }
 
-    public void addCall(String customerPhone, ImageView pic, Uri mImap){
+    public void addCall(String customerPhone, ImageView pic, Intent mImap){
         Bitmap bitmap = ((BitmapDrawable) pic.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         StartActivity.storageRef.child(this.name).child("workPlaceCalls").child(customerPhone).putBytes(data);
-        Log.d("miamp", "addCall: " + mImap);
-        StartActivity.mDatabaseReferencePlaces.child(this.name).child(UPLOADS).setValue(new Call(customerPhone,mImap));
+        Log.d("miamp", "addCall: " + mImap.getData());
+        StartActivity.mDatabaseReferencePlaces.child(this.name).child(UPLOADS).setValue(new Call(customerPhone,mImap.getData()));
         if(employees==null){
             return;
         }

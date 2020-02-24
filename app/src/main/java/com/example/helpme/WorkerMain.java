@@ -44,6 +44,7 @@ public class WorkerMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_main);
         initView();
+        initListViews();
     }
 
     private void initView() {
@@ -58,6 +59,11 @@ public class WorkerMain extends AppCompatActivity {
         }
         place.setText(STORE + workPlace.getName());
         calls = new ArrayList<>();
+
+
+    }
+
+    private void initListViews(){
         listRef = StartActivity.storageRef.child(workPlace.getName()).child("workPlaceCalls");
         callsRef = StartActivity.mDatabaseReferencePlaces.child(workPlace.getName()).child(UPLOADS);
         callsRef.addValueEventListener(new ValueEventListener() {
@@ -77,6 +83,5 @@ public class WorkerMain extends AppCompatActivity {
 
             }
         });
-
     }
 }

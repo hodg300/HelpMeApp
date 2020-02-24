@@ -45,7 +45,7 @@ public class CustomerMain extends AppCompatActivity {
     private String intentName;
     private String intentPlace;
     private WorkPlace currentPlace;
-    private Uri mImapPic;
+    private Intent mImapPic;
     private boolean photoExists=false;
 
     @Override
@@ -134,7 +134,8 @@ public class CustomerMain extends AppCompatActivity {
             Bitmap bitmap=(Bitmap)data.getExtras().get("data");
             returnPhoto.setImageBitmap(bitmap);
             photoExists = true;
-            mImapPic = data.getData();
+
+            mImapPic = data;
 
             Log.d(TAG, "onActivityResult: " + mImapPic);
         }else{
