@@ -3,6 +3,8 @@ package com.example.helpme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -22,56 +24,81 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class WorkerMain extends AppCompatActivity {
     private final String WORK_PLACE="WorkPlaceName";
     private final String EMPLOYEE="nameOfEmployee";
-    private final String UPLOADS = "uploads";
+    private final String UPLOADS = "Uploads";
     private final String HI="Hi ";
     private final String STORE="Store: ";
     private TextView name;
     private TextView place;
+    private ImageView image;
     private WorkPlace workPlace;
     private ListView callsList;
     private StorageReference listRef;
     private DatabaseReference callsRef;
-    private ArrayList<Call> calls;
+    private ArrayList<String> calls;
+    private String call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_main);
         initView();
-        initListViews();
+        createListView();
+        findCustomerPhoneClickOnList();//check what is clicked and get the cellphone number of customer
     }
 
+
+
     private void initView() {
+        image=findViewById(R.id.location_photo);
         name=findViewById(R.id.worker_name);
         place=findViewById(R.id.place_name);
         callsList=findViewById(R.id.workMainlistView);
         name.setText(HI + getIntent().getStringExtra(EMPLOYEE));
         String placeID = getIntent().getStringExtra(WORK_PLACE);
+
+        //found right place
         for(WorkPlace p : StartActivity.places.getArrayList()){
             if (p.getCode().equals(placeID))
                 workPlace = p;
         }
         place.setText(STORE + workPlace.getName());
         calls = new ArrayList<>();
-
-
     }
 
-    private void initListViews(){
-        listRef = StartActivity.storageRef.child(workPlace.getName()).child("workPlaceCalls");
+    private void findCustomerPhoneClickOnList(){
+        callsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                call=callsList.getItemAtPosition(i).toString();
+                getImageFromStorage();//view the photo in imageview
+            }
+        });
+
+    }
+    private void getImageFromStorage() {
+        Picasso.with(this).load(call+".jpg").into(image);
+    }
+
+    private void createListView(){
+        Log.d("hodiii", "onDataChange:iiiii ");
+
+//        listRef = StartActivity.storageRef.child(workPlace.getName()).child("workPlaceCalls");
+
         callsRef = StartActivity.mDatabaseReferencePlaces.child(workPlace.getName()).child(UPLOADS);
         callsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Call call = postSnapshot.getValue(Call.class);
-                    calls.add(call);
+                    calls.add(postSnapshot.getValue().toString());
                 }
                 ArrayAdapter arrayAdapter=
                         new ArrayAdapter(WorkerMain.this,android.R.layout.simple_list_item_1,calls);
@@ -83,5 +110,9 @@ public class WorkerMain extends AppCompatActivity {
 
             }
         });
+
+        //here i need to create the listview and another(findCustomerPhoneClickOnList,getImageFromStorage) function do the job
+
+
     }
 }
