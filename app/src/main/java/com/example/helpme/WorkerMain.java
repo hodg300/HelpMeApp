@@ -3,19 +3,30 @@ package com.example.helpme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,6 +59,9 @@ public class WorkerMain extends AppCompatActivity {
     private DatabaseReference callsRef;
     private ArrayList<Call> calls;
     private Call call;
+    private Button confirm;
+    private Button cancel;
+    private ImageView imagePopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +75,7 @@ public class WorkerMain extends AppCompatActivity {
 
 
     private void initView() {
-        image=findViewById(R.id.location_photo);
+//        image=findViewById(R.id.location_photo);
         name=findViewById(R.id.worker_name);
         place=findViewById(R.id.place_name);
         callsList=findViewById(R.id.workMainlistView);
@@ -84,14 +98,24 @@ public class WorkerMain extends AppCompatActivity {
         callsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String retrieveCellphoneNumber = dataSnapshot.child(CUSTOMER_NUMBER).getValue().toString();
-                String retrievePic = dataSnapshot.child(PIC).getValue().toString();
-                calls.add(new Call(retrieveCellphoneNumber,retrievePic));
+
+                for(DataSnapshot post:dataSnapshot.getChildren()){
+                    String retrieveCellphoneNumber = dataSnapshot.child(post.getKey()).child(CUSTOMER_NUMBER).getValue().toString();
+                    String retrievePic = dataSnapshot.child(post.getKey()).child(PIC).getValue().toString();
+                    if(!dataSnapshot.child(retrieveCellphoneNumber).exists()) {
+                        calls.add(new Call(retrieveCellphoneNumber, retrievePic));
+                    }else{
+                        calls.remove(new Call(retrieveCellphoneNumber,retrievePic));
+                        calls.add(new Call(retrieveCellphoneNumber, retrievePic));
+                    }
+                }
+
                 //create adapter
                 ArrayAdapter arrayAdapter=
                         new ArrayAdapter(WorkerMain.this,android.R.layout.simple_list_item_1,calls);
                 //add to listView
                 callsList.setAdapter(arrayAdapter);
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -104,13 +128,52 @@ public class WorkerMain extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 call=(Call)callsList.getItemAtPosition(i);
-                Log.d("sss", "onItemClick: " + call.pic);
-                getImageFromStorage();//view the photo in imageview
+                createPopUp();
             }
         });
 
     }
-    private void getImageFromStorage() {
+
+    private void createPopUp() {
+//        final Dialog MyDialog = new Dialog(WorkerMain.this);
+//        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        MyDialog.setContentView(R.layout.popup_custom_dialog);
+//
+//        confirm = (Button)MyDialog.findViewById(R.id.confirm);
+//        cancel = (Button)MyDialog.findViewById(R.id.cancel);
+//        imagePopup=findViewById(R.id.image_popup);
+//        getImageFromStorage();//view the photo in imageview
+//
+//        confirm.setEnabled(true);
+//        cancel.setEnabled(true);
+//
+//        confirm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MyDialog.cancel();
+//            }
+//        });
+//
+//        MyDialog.show();
+        DisplayMetrics dm=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width=dm.widthPixels;
+        int height=dm.heightPixels;
+//        findViewById(R.layout.popup_custom_dialog).setLayoutParams(new RelativeLayout.LayoutParams((int)(width*.8),(int)(height*.7)));
+        WindowManager.LayoutParams params=getWindow().getAttributes();
+        params.gravity= Gravity.CENTER;
+        params.x=0;
+        params.y=-20;
+        getWindow().setAttributes(params);
+    }
+
+    private void getImageFromStorage(ImageView image) {
         Picasso.with(WorkerMain.this).load(call.pic).into(image);
     }
 }

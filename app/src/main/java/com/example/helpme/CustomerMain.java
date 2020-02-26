@@ -55,6 +55,7 @@ public class CustomerMain extends AppCompatActivity {
     private String intentPlace;
     private WorkPlace currentPlace;
     private Uri imageUri;
+    public static FirebaseService fireBase;
     private boolean photoExists=false;
 
     @Override
@@ -65,7 +66,8 @@ public class CustomerMain extends AppCompatActivity {
         getNameAndStoreFromCustomerMain();
         clickToTakeAPhoto();
         sendAlertToWorker();
-
+        fireBase = new FirebaseService();
+        FirebaseService.createChannelAndHandleNotifications(this);
     }
 
     private void initClientService() {
@@ -158,6 +160,7 @@ public class CustomerMain extends AppCompatActivity {
                 public void onClick(View view) {
                     if(photoExists) {
                         currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri);
+                        fireBase.sendNotification("new Call In " + currentPlace.getName());
                         Toast.makeText(CustomerMain.this,
                                 "Your request has been sent", Toast.LENGTH_SHORT).show();
                     }else{

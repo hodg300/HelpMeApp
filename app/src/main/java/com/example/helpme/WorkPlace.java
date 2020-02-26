@@ -68,7 +68,7 @@ public class WorkPlace implements Comparable {
                     @Override
                     public void onSuccess(Uri uri) {
                         Log.d("hodd", "onSuccess: " + uri);
-                        StartActivity.mDatabaseReferencePlaces.child(name).child(UPLOADS).setValue(new Call(customerPhone,String.valueOf(uri)))
+                        StartActivity.mDatabaseReferencePlaces.child(name).child(UPLOADS).child(customerPhone).setValue(new Call(customerPhone,String.valueOf(uri)))
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
