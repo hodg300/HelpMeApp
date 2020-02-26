@@ -135,45 +135,45 @@ public class WorkerMain extends AppCompatActivity {
     }
 
     private void createPopUp() {
-//        final Dialog MyDialog = new Dialog(WorkerMain.this);
-//        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        MyDialog.setContentView(R.layout.popup_custom_dialog);
-//
-//        confirm = (Button)MyDialog.findViewById(R.id.confirm);
-//        cancel = (Button)MyDialog.findViewById(R.id.cancel);
-//        imagePopup=findViewById(R.id.image_popup);
-//        getImageFromStorage();//view the photo in imageview
-//
-//        confirm.setEnabled(true);
-//        cancel.setEnabled(true);
-//
-//        confirm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MyDialog.cancel();
-//            }
-//        });
-//
-//        MyDialog.show();
-        DisplayMetrics dm=new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width=dm.widthPixels;
-        int height=dm.heightPixels;
-//        findViewById(R.layout.popup_custom_dialog).setLayoutParams(new RelativeLayout.LayoutParams((int)(width*.8),(int)(height*.7)));
-        WindowManager.LayoutParams params=getWindow().getAttributes();
-        params.gravity= Gravity.CENTER;
-        params.x=0;
-        params.y=-20;
-        getWindow().setAttributes(params);
+        final Dialog myDialog = new Dialog(WorkerMain.this);
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.popup_custom_dialog);
+
+        confirm = (Button)myDialog.findViewById(R.id.confirm);
+        cancel = (Button)myDialog.findViewById(R.id.cancel);
+        imagePopup=myDialog.findViewById(R.id.image_popup);
+        getImageFromStorage(imagePopup);//view the photo in imageview
+
+        confirm.setEnabled(true);
+        cancel.setEnabled(true);
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "A message was sent to the customer", Toast.LENGTH_LONG).show();
+                removeCallFromDatabase(call);
+                calls.remove(call);
+                myDialog.cancel();
+                //hereeeee we need to send alert to customer that are on way...
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+
+        myDialog.show();
+
     }
 
     private void getImageFromStorage(ImageView image) {
         Picasso.with(WorkerMain.this).load(call.pic).into(image);
+    }
+
+    private void removeCallFromDatabase(Call c){
+       callsRef.child(call.customerNumber).setValue(null);
     }
 }

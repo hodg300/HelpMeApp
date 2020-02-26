@@ -179,11 +179,6 @@ public class CustomerMain extends AppCompatActivity {
         if(resultCode ==RESULT_OK) {
             returnPhoto.setImageURI(imageUri);
             photoExists = true;
-        }else{
-            Intent intent=new Intent(this,CustomerMain.class);
-            setResult(RESULT_OK, intent);
-            startActivity(intent);
-            finish();
         }
     }
 
