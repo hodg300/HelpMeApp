@@ -4,6 +4,8 @@ import android.graphics.Picture;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+
 public class Call {
     public String customerNumber;
     public String pic;
@@ -20,6 +22,7 @@ public class Call {
         //now raise pop-up with worker name on customer-main activity
         this.done = true;
     }
+
 }
 
 

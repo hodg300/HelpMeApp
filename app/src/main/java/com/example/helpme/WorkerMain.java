@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -34,6 +35,8 @@ public class WorkerMain extends AppCompatActivity {
     private final String WORK_PLACE="WorkPlaceName";
     private final String EMPLOYEE="nameOfEmployee";
     private final String UPLOADS = "Uploads";
+    private final String CUSTOMER_NUMBER="customerNumber";
+    private final String PIC="pic";
     private final String HI="Hi ";
     private final String STORE="Store: ";
     private TextView name;
@@ -43,8 +46,8 @@ public class WorkerMain extends AppCompatActivity {
     private ListView callsList;
     private StorageReference listRef;
     private DatabaseReference callsRef;
-    private ArrayList<String> calls;
-    private String call;
+    private ArrayList<Call> calls;
+    private Call call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,45 +77,40 @@ public class WorkerMain extends AppCompatActivity {
         calls = new ArrayList<>();
     }
 
+
+
+    private void createListView(){
+        callsRef = StartActivity.mDatabaseReferencePlaces.child(workPlace.getName()).child(UPLOADS);
+        callsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String retrieveCellphoneNumber = dataSnapshot.child(CUSTOMER_NUMBER).getValue().toString();
+                String retrievePic = dataSnapshot.child(PIC).getValue().toString();
+                calls.add(new Call(retrieveCellphoneNumber,retrievePic));
+                //create adapter
+                ArrayAdapter arrayAdapter=
+                        new ArrayAdapter(WorkerMain.this,android.R.layout.simple_list_item_1,calls);
+                //add to listView
+                callsList.setAdapter(arrayAdapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
     private void findCustomerPhoneClickOnList(){
         callsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                call=callsList.getItemAtPosition(i).toString();
+                call=(Call)callsList.getItemAtPosition(i);
+                Log.d("sss", "onItemClick: " + call.pic);
                 getImageFromStorage();//view the photo in imageview
             }
         });
 
     }
     private void getImageFromStorage() {
-        Picasso.with(this).load(call+".jpg").into(image);
-    }
-
-    private void createListView(){
-        Log.d("hodiii", "onDataChange:iiiii ");
-
-//        listRef = StartActivity.storageRef.child(workPlace.getName()).child("workPlaceCalls");
-
-        callsRef = StartActivity.mDatabaseReferencePlaces.child(workPlace.getName()).child(UPLOADS);
-        callsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    calls.add(postSnapshot.getValue().toString());
-                }
-                ArrayAdapter arrayAdapter=
-                        new ArrayAdapter(WorkerMain.this,android.R.layout.simple_list_item_1,calls);
-                callsList.setAdapter(arrayAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        //here i need to create the listview and another(findCustomerPhoneClickOnList,getImageFromStorage) function do the job
-
-
+        Picasso.with(WorkerMain.this).load(call.pic).into(image);
     }
 }

@@ -145,19 +145,6 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void updateDataBase(){
-//        WorkPlace Renuar = new WorkPlace("Renuar","12345", 10, new Employee("Yosi", "308464239", "0509808050"));
-//        Renuar.addWorker(new Employee("tal","1234","0523976905"));
-//        Renuar.addWorker(new Employee("hod","4567", "526327767"));
-//        Renuar.addWorker(new Employee("jos","4321", "0509808050"));
-//        places.addPlace(Renuar);
-//        places.addPlace(new WorkPlace("Castro","23423410",10, new Employee("Yosi", "308464239", "0509808050")));
-//        places.addPlace(new WorkPlace("Zara","17556",10, new Employee("Yosi", "308464239", "0509808050")));
-//        places.addPlace(new WorkPlace("Bershka","78978",10, new Employee("Yosi", "308464239", "0509808050")));
-//        places.addPlace(new WorkPlace("Billabong","8954",10, new Employee("Yosi", "308464239", "0509808050")));
-//        places.addPlace(new WorkPlace("Adidas","99654",10, new Employee("Yosi", "308464239", "0509808050")));
-//        places.addPlace(new WorkPlace("Nike","8654",10, new Employee("Yosi", "308464239", "0509808050")));
-//        places.sortPlaces();
-//        mDatabaseReferencePlaces.setValue("Places");
         for(WorkPlace p : places.getArrayList()){
             mDatabaseReferencePlaces.child(p.getName()).setValue(p);
         }

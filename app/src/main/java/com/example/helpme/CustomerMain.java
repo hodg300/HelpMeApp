@@ -143,7 +143,6 @@ public class CustomerMain extends AppCompatActivity {
     }
 
     private void openCamera(){
-        Log.d(TAG, "openCamera:  immmhereeee");
         ContentValues values =new ContentValues();
         values.put(MediaStore.Images.Media.TITLE,"New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION,"From The Camera");
@@ -158,7 +157,7 @@ public class CustomerMain extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if(photoExists) {
-                        currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri);//here we send alert to employees
+                        currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri);
                         Toast.makeText(CustomerMain.this,
                                 "Your request has been sent", Toast.LENGTH_SHORT).show();
                     }else{
@@ -176,11 +175,7 @@ public class CustomerMain extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode ==RESULT_OK) {
             returnPhoto.setImageURI(imageUri);
-//            Bitmap bitmap=(Bitmap)data.getExtras().get("data");
-//            returnPhoto.setImageBitmap(bitmap);
             photoExists = true;
-
-            Log.d(TAG, "onActivityResult: " + imageUri);
         }else{
             Intent intent=new Intent(this,CustomerMain.class);
             setResult(RESULT_OK, intent);

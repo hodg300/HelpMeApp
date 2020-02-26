@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -26,7 +27,7 @@ import java.util.Map;
 import java.util.Queue;
 
 public class WorkPlace implements Comparable {
-    private final String UPLOADS = "uploads";
+    private final String UPLOADS = "Uploads";
     private String name;
     private String code;
     private int numOfWorkers = 0;
@@ -58,32 +59,28 @@ public class WorkPlace implements Comparable {
         numOfWorkers--;
     }
 
-    public void addCall(final String customerPhone, ImageView pic, Uri mImap){
-//        Bitmap bitmap = ((BitmapDrawable) pic.getDrawable()).getBitmap();
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//        StartActivity.storageRef.child(this.name).child("workPlaceCalls").child(customerPhone).putBytes(data);
-        StorageReference filePath=StartActivity.storageRef.child(this.name).child("workPlaceCalls").child(customerPhone+ ".jpg");
-        filePath.putFile(mImap).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+    public void addCall(final String customerPhone, ImageView pic, Uri imageUri){
+        final StorageReference filePath=StartActivity.storageRef.child(this.name).child("workPlaceCalls").child("image"+ imageUri.getLastPathSegment());
+        filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if(task.isSuccessful()) {
-                   final String downloadUrl=task.getResult().toString();
-                    Log.d("downloadurl", "onComplete: " +downloadUrl);
-                   StartActivity.mDatabaseReferencePlaces.child(name).child("Uploads").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-                       @Override
-                       public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Log.d("Wrokplace", "onComplete: isSeccessful");
-                            }else{
-                                Log.d("Wrokplace", "onComplete: isnt Seccessful");
-                            }
-                       }
-                   });
-                }
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.d("hodd", "onSuccess: " + uri);
+                        StartActivity.mDatabaseReferencePlaces.child(name).child(UPLOADS).setValue(new Call(customerPhone,String.valueOf(uri)))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        Log.d("Wrokplace", "onComplete: isSeccessful");
+                                    }
+                                });
+                    }
+                });
             }
         });
+
 
 //        StartActivity.mDatabaseReferencePlaces.child(this.name).child(UPLOADS).setValue(mImap);
         if(employees==null){
