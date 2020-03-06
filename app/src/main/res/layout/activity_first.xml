@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".FirstActivity">
 
-
     <TextView
-        android:id="@+id/Title"
+        android:id="@+id/firstTitle"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="80dp"
         android:background="#E1E3EC"
         android:text="HelpMe"
         android:textAlignment="center"
@@ -21,20 +20,18 @@
         tools:layout_editor_absoluteY="60dp" />
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/picGround"
         android:src="@drawable/helpmeicon"
         android:background="@drawable/edit_round"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/firstTitle"
         android:layout_centerInParent="true"/>
 
-
     <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/icon"
-        android:layout_marginTop="30dp"
+        android:id="@+id/first_progress_bar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>

@@ -28,15 +28,11 @@ import java.util.TreeMap;
 public class ListPlacesActivity extends AppCompatActivity {
     private final String CUSTOMER_NAME="customerName";
     private final String NAME_OF_PLACE="nameOfPlace";
-    private final String PHONE_NUM="PhoneNum";
     private ListView listView;
     private String nameOfChosePlace;
     private boolean isChoosePlace=false;
     private TextView nameEditText;
-    private ImageView confirmBtn;
-    private String completeNum;
-
-    private Map<Integer,String> placeMap;
+    private Button confirmBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +45,9 @@ public class ListPlacesActivity extends AppCompatActivity {
     }
 
     private void initViews(){
-        confirmBtn=(ImageView)findViewById(R.id.confirmBtn);
+        confirmBtn=(Button) findViewById(R.id.loginConfirmBtn);
         nameEditText=(EditText)findViewById(R.id.customerEditName);
         listView=(ListView)findViewById(R.id.listView);
-        //completeNum = getIntent().getStringExtra(PHONE_NUM);
         createListViews();
     }
 
@@ -102,8 +97,5 @@ public class ListPlacesActivity extends AppCompatActivity {
             });
     }
 
-    @Override
-    public void onBackPressed() {
-        //no action
-    }
+
 }
