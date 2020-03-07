@@ -117,7 +117,6 @@ public class WorkerMain extends AppCompatActivity {
     }
 
     private void initView() {
-//        image=findViewById(R.id.location_photo);
         name=findViewById(R.id.worker_name);
         place=findViewById(R.id.place_name);
         callsList=findViewById(R.id.workMainlistView);
