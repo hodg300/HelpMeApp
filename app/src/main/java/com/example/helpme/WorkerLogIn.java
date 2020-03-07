@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -23,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class WorkerLogIn extends AppCompatActivity {
     private final String WORK_PLACE="WorkPlaceName";
     private final String EMPLOYEE="nameOfEmployee";
@@ -32,23 +35,48 @@ public class WorkerLogIn extends AppCompatActivity {
     private Button connectMan;
     private String empMail;
     private String placeID;
-
+    public static PlaceFactory places_worker;
+    private ArrayList<WorkPlace> temp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_log_in);
         initViews();
+        initPlaces();
         logIn();
     }
+
+
+
 
     private void initViews() {
         workerMail= (EditText) findViewById(R.id.workerEditMail);
         placeCode = (EditText) findViewById(R.id.workplaceCode);
         connectEmp = (Button) findViewById(R.id.workerConnectBTN);
         connectMan = (Button) findViewById(R.id.managerConnectBTN);
+        places_worker = new PlaceFactory();
+        temp = new ArrayList<>();
     }
 
-    private void logIn() {
+    private void initPlaces() {
+        StartActivity.mDatabaseReferencePlaces.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot d : dataSnapshot.getChildren()){
+                    WorkPlace p = d.getValue(WorkPlace.class);
+                    temp.add(p);
+                }
+                places_worker.setArrayList(temp);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
+        private void logIn() {
         connectEmp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,8 +106,9 @@ public class WorkerLogIn extends AppCompatActivity {
             public void onClick(View v) {
                 empMail = workerMail.getText().toString();
                 placeID = placeCode.getText().toString();
+
                 if (empMail != null && placeID != null) {
-                    for (WorkPlace p : ListPlacesActivity.places.getArrayList()) {
+                    for (WorkPlace p : places_worker.getArrayList()) {
                         if (p.getCode().equals(placeID)) {
                             if (p.getManager() != null) {
                                 if (empMail.equals(p.getManager().getId())) {

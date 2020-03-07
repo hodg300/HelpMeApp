@@ -125,7 +125,7 @@ public class WorkerMain extends AppCompatActivity {
         String placeID = getIntent().getStringExtra(WORK_PLACE);
 
         //found right place
-        for(WorkPlace p : ListPlacesActivity.places.getArrayList()){
+        for(WorkPlace p : WorkerLogIn.places_worker.getArrayList()){
             if (p.getCode().equals(placeID))
                 workPlace = p;
         }
@@ -220,10 +220,8 @@ public class WorkerMain extends AppCompatActivity {
     private void removeCallFromDatabase(Call c){
        callsRef.child(call.customerNumber).setValue(null);
        StartActivity.storageRef.child(workPlace.getName()).child(WORK_PLACE_CALLS).child(call.customerNumber).delete();
+
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
+
 }

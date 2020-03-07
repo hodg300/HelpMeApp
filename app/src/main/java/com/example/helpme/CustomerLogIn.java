@@ -25,6 +25,7 @@ public class CustomerLogIn extends AppCompatActivity {
     private Spinner spinnerExists;
     private boolean userExists =false;
     private TextView createUserTextView;
+    public static String completeNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class CustomerLogIn extends AppCompatActivity {
         if (number.charAt(0) == '0') {
             number = number.substring(1);
         }
-        CreateCustomer.completeNum = "+" + code + number;
+        completeNum = "+" + code + number;
     }
 
     private void logIn() {
@@ -94,7 +95,7 @@ public class CustomerLogIn extends AppCompatActivity {
                 // whenever data at this location is updated.
 
                 for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
-                    if (mDataSnapshot1.getValue().toString().equals(CreateCustomer.completeNum)) {
+                    if (mDataSnapshot1.getValue().toString().equals(completeNum)) {
                         userExists = true;
 //                            CustomerLogIn.completeNum = StartActivity.mFireBaseAuth.getCurrentUser().getPhoneNumber();
                     }

@@ -99,9 +99,9 @@ public class StartActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                if (CreateCustomer.completeNum != null) {
+                if (CustomerLogIn.completeNum != null) {
                     for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
-                        if (mDataSnapshot1.getValue().toString().equals(CreateCustomer.completeNum)) {
+                        if (mDataSnapshot1.getValue().toString().equals(CustomerLogIn.completeNum)) {
                             userExists = true;
                         }
                     }

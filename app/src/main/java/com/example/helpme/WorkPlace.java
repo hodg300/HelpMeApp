@@ -61,7 +61,7 @@ public class WorkPlace implements Comparable {
     }
 
     public void addCall(final String customerPhone, ImageView pic, Uri imageUri){
-        final StorageReference filePath=StartActivity.storageRef.child(this.name).child(WORK_PLACE_CALLS).child("image"+ imageUri.getLastPathSegment());
+        final StorageReference filePath=StartActivity.storageRef.child(this.name).child(WORK_PLACE_CALLS).child(customerPhone);
         filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

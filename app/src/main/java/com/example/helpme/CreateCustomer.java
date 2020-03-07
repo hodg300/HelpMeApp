@@ -34,7 +34,7 @@ public class CreateCustomer extends AppCompatActivity {
     private Spinner spinner;
     private ProgressBar progress_bar_phone_num;
     private String mVerificationId;
-    public static String completeNum;
+//    public static String completeNum;
     private EditText mCodeText;
     private boolean userExists=false;
 
@@ -76,7 +76,7 @@ public class CreateCustomer extends AppCompatActivity {
         if(number.charAt(0)=='0'){
             number=number.substring(1);
         }
-        completeNum="+" + code + number;
+        CustomerLogIn.completeNum="+" + code + number;
     }
 
     private void logIn() {
@@ -85,7 +85,7 @@ public class CreateCustomer extends AppCompatActivity {
             public void onClick(View view) {
                 createCellPhoneNumber();
 //                userExists();
-                sendVerificationCode(completeNum);
+                sendVerificationCode(CustomerLogIn.completeNum);
                 send_verification_Btn.setEnabled(false);
                 send_verification_Btn.setVisibility(View.INVISIBLE);
                 verify_code_Btn.setEnabled(true);
@@ -144,7 +144,7 @@ public class CreateCustomer extends AppCompatActivity {
 
     private void sendVerificationCode(String number){
         progress_bar_phone_num.setVisibility(View.VISIBLE);
-        Log.d(TAG, "createCellPhoneNumber: " +completeNum);
+        Log.d(TAG, "createCellPhoneNumber: " +CustomerLogIn.completeNum);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         number,        // Phone number to verify
                         60,                 // Timeout duration
@@ -179,7 +179,7 @@ public class CreateCustomer extends AppCompatActivity {
 
 
     private void addNumberToDatabase(){
-        StartActivity.mDatabaseReferenceAuth.push().setValue(completeNum);
+        StartActivity.mDatabaseReferenceAuth.push().setValue(CustomerLogIn.completeNum);
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {

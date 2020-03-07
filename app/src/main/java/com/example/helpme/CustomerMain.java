@@ -173,7 +173,7 @@ public class CustomerMain extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if(photoExists && employeeList!=null) {
-                        currentPlace.addCall(CreateCustomer.completeNum,returnPhoto, imageUri);
+                        currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri);
                         String title = "New Call";
                         String body = "New call in " + currentPlace.getName() + " from " + name;
                         for(Employee e : employeeList){
