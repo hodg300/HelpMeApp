@@ -79,7 +79,7 @@ public class WorkerLogIn extends AppCompatActivity {
                 empMail = workerMail.getText().toString();
                 placeID = placeCode.getText().toString();
                 if (empMail != null && placeID != null) {
-                    for (WorkPlace p : StartActivity.places.getArrayList()) {
+                    for (WorkPlace p : ListPlacesActivity.places.getArrayList()) {
                         if (p.getCode().equals(placeID)) {
                             if (p.getManager() != null) {
                                 if (empMail.equals(p.getManager().getId())) {

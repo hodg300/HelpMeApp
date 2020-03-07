@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,31 +35,30 @@ public class ListPlacesActivity extends AppCompatActivity {
     private String nameOfChosePlace;
     private boolean isChoosePlace=false;
     private TextView nameEditText;
+    public static PlaceFactory places;
     private Button confirmBtn;
+    public interface DataStatus{
+        void DataIsLoaded(ArrayList<WorkPlace> places);
+        void DataIsInserted();
+        void DataIsUpdated();
+        void DataIsDeleted();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_places);
-        initViews();
-        createListViews();
+        init();
+        startInitPlaces();
         choosePlace();
         connectAndStartListPlacesActivity();
     }
 
-    private void initViews(){
+    private void init(){
         confirmBtn=(Button) findViewById(R.id.loginConfirmBtn);
         nameEditText=(EditText)findViewById(R.id.customerEditName);
         listView=(ListView)findViewById(R.id.listView);
-        createListViews();
-    }
-
-    private void createListViews() {
-        if(StartActivity.places!=null) {
-            ArrayAdapter arrayAdapter =
-                    new ArrayAdapter(this, android.R.layout.simple_list_item_1, StartActivity.places.returnNames());
-            listView.setAdapter(arrayAdapter);
-        }
+        places = new PlaceFactory();
     }
 
     //choose place
@@ -97,5 +99,55 @@ public class ListPlacesActivity extends AppCompatActivity {
             });
     }
 
+    private void startInitPlaces(){
+        initPlaces(new ListPlacesActivity.DataStatus() {
+            @Override
+            public void DataIsLoaded(ArrayList<WorkPlace> places) {
+                ListPlacesActivity.places.setArrayList(places);
+            }
 
+            @Override
+            public void DataIsInserted() {
+
+            }
+
+            @Override
+            public void DataIsUpdated() {
+
+            }
+
+            @Override
+            public void DataIsDeleted() {
+
+            }
+        });
+    }
+
+    private void initPlaces(final DataStatus dataStatus) {
+        StartActivity.mDatabaseReferencePlaces.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<WorkPlace> temp = new ArrayList<>();
+                for(DataSnapshot d : dataSnapshot.getChildren()){
+                    WorkPlace p = d.getValue(WorkPlace.class);
+                    temp.add(p);
+                }
+                dataStatus.DataIsLoaded(temp);
+                ArrayAdapter arrayAdapter =
+                        new ArrayAdapter(ListPlacesActivity.this, android.R.layout.simple_list_item_1, ListPlacesActivity.places.returnNames());
+                listView.setAdapter(arrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ListPlacesActivity.this, StartActivity.class);
+        startActivity(intent);
+    }
 }

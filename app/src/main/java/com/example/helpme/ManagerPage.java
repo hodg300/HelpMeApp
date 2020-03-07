@@ -81,7 +81,7 @@ public class ManagerPage extends AppCompatActivity {
         intentName=getIntent().getStringExtra(EMPLOYEE);
         intentPlace=getIntent().getStringExtra(WORK_PLACE);
         this.hello.setText("Hello " + intentName);
-        for(WorkPlace p : StartActivity.places.getArrayList()){
+        for(WorkPlace p : ListPlacesActivity.places.getArrayList()){
             if (p.getName().equals(intentPlace))
                 this.place = p;
         }
