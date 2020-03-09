@@ -149,7 +149,6 @@ public class WorkerMain extends AppCompatActivity {
                         String retrievePic = dataSnapshot.child(post.getKey()).child(PIC).getValue().toString();
                         String retrieveToken = dataSnapshot.child(post.getKey()).child(TOKEN).getValue().toString();
                         String retrieveUid = dataSnapshot.child(post.getKey()).child(UID).getValue().toString();
-//                        calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
                         if (!dataSnapshot.child(retrieveCellphoneNumber).exists()) {
                             calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
                         } else {
@@ -204,7 +203,6 @@ public class WorkerMain extends AppCompatActivity {
                 removeCallFromDatabaseAndStorage(call);
 
                 calls.remove(call);//remove from list maybe we dont need this
-//                createListView();
                 myDialog.cancel();
             }
         });
