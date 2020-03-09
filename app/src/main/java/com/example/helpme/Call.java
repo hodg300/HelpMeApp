@@ -4,6 +4,8 @@ import android.graphics.Picture;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -77,6 +79,11 @@ public class Call implements Serializable {
         return this.callUid;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return customerNumber;
+    }
 }
 
 

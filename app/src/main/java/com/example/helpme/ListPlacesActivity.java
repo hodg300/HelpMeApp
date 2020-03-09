@@ -68,7 +68,7 @@ public class ListPlacesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 clearBackgroundItems();
                 nameOfChosePlace = listView.getItemAtPosition(position).toString();
-                view.setBackgroundColor(Color.CYAN);
+                view.setBackgroundColor(Color.YELLOW);
                 isChoosePlace=true;
             }
         });
@@ -77,7 +77,7 @@ public class ListPlacesActivity extends AppCompatActivity {
     //clear all places that sign before
     private void clearBackgroundItems(){
         for(View v:listView.getTouchables()){
-            v.setBackgroundColor(Color.WHITE);
+            v.setBackgroundColor(00000000);
         }
     }
 
@@ -91,7 +91,7 @@ public class ListPlacesActivity extends AppCompatActivity {
                         intent.putExtra(NAME_OF_PLACE, nameOfChosePlace);
                         startActivity(intent);
                     }else if(nameEditText.getText().toString().equals("")){
-                        nameEditText.setError("You must fill in your name for identification");
+                        nameEditText.setError("Help us to find you, please enter your name");
                         nameEditText.requestFocus();
                     }else if(isChoosePlace==false){
                         Toast.makeText(ListPlacesActivity.this,

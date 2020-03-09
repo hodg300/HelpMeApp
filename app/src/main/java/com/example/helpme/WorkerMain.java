@@ -195,7 +195,7 @@ public class WorkerMain extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "A message was sent to the customer", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.messageToCustomer, Toast.LENGTH_LONG).show();
 
                 sendAlertToCustomer(TITLE,BODY);
                 removeCallFromDatabase(call);
@@ -253,7 +253,7 @@ public class WorkerMain extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         counter++;
-        Toast.makeText(this, "Click again to logout", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.logOutMessage, Toast.LENGTH_SHORT).show();
         if(counter==2){
             super.onBackPressed();
         }
