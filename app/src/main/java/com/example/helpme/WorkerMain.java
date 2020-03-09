@@ -82,7 +82,7 @@ public class WorkerMain extends AppCompatActivity {
     private Button cancel;
     private ImageView imagePopup;
     private int counter=0;
-
+    private ArrayAdapter arrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,15 +148,16 @@ public class WorkerMain extends AppCompatActivity {
                         String retrievePic = dataSnapshot.child(post.getKey()).child(PIC).getValue().toString();
                         String retrieveToken = dataSnapshot.child(post.getKey()).child(TOKEN).getValue().toString();
                         String retrieveUid = dataSnapshot.child(post.getKey()).child(UID).getValue().toString();
-                        if (!dataSnapshot.child(retrieveCellphoneNumber).exists()) {
-                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-                        } else {
-                            calls.remove(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-                        }
+                        calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+//                        if (!dataSnapshot.child(retrieveCellphoneNumber).exists()) {
+//                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+//                        } else {
+//                            calls.remove(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+//                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+//                        }
                     }
                     //create adapter
-                    ArrayAdapter arrayAdapter =
+                     arrayAdapter =
                             new ArrayAdapter(WorkerMain.this, android.R.layout.simple_list_item_1, calls);
                     //add to listView
                     callsList.setAdapter(arrayAdapter);
@@ -165,6 +166,7 @@ public class WorkerMain extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+
         }
     }
 
@@ -198,9 +200,10 @@ public class WorkerMain extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.messageToCustomer, Toast.LENGTH_LONG).show();
 
                 sendAlertToCustomer(TITLE,BODY);
-                removeCallFromDatabase(call);
+                removeCallFromDatabaseAndStorage(call);
 
                 calls.remove(call);//remove from list maybe we dont need this
+                createListView();
                 myDialog.cancel();
             }
         });
@@ -243,8 +246,9 @@ public class WorkerMain extends AppCompatActivity {
         Picasso.with(WorkerMain.this).load(call.getPic()).into(image);
     }
 
-    private void removeCallFromDatabase(Call c){
-       callsRef.child(call.getCustomerNumber()).setValue(null);
+    private void removeCallFromDatabaseAndStorage(Call c){
+
+       callsRef.child(call.getCustomerNumber()).removeValue();
        StartActivity.storageRef.child(workPlace.getName()).child(WORK_PLACE_CALLS).child(call.getCustomerNumber()).delete();
 
     }
