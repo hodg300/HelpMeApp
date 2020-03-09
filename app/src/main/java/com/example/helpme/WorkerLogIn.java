@@ -46,9 +46,6 @@ public class WorkerLogIn extends AppCompatActivity {
         logIn();
     }
 
-
-
-
     private void initViews() {
         workerMail= (EditText) findViewById(R.id.workerEditMail);
         placeCode = (EditText) findViewById(R.id.workplaceCode);
@@ -91,7 +88,6 @@ public class WorkerLogIn extends AppCompatActivity {
                                         Intent intent = new Intent(WorkerLogIn.this, WorkerMain.class);
                                         intent.putExtra(WORK_PLACE, placeID);
                                         intent.putExtra(EMPLOYEE, empMail);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     } else
                                         Toast.makeText(WorkerLogIn.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();

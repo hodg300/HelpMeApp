@@ -85,13 +85,15 @@ public class ListPlacesActivity extends AppCompatActivity {
             confirmBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isChoosePlace) {
-                    Intent intent = new Intent(ListPlacesActivity.this, CustomerMain.class);
-                    intent.putExtra(CUSTOMER_NAME, nameEditText.getText().toString());
-                    intent.putExtra(NAME_OF_PLACE, nameOfChosePlace);
-                    //intent.putExtra(PHONE_NUM,completeNum);
-                    startActivity(intent);
-                    }else{
+                    if(isChoosePlace && !nameEditText.getText().toString().equals("")) {
+                        Intent intent = new Intent(ListPlacesActivity.this, CustomerMain.class);
+                        intent.putExtra(CUSTOMER_NAME, nameEditText.getText().toString());
+                        intent.putExtra(NAME_OF_PLACE, nameOfChosePlace);
+                        startActivity(intent);
+                    }else if(nameEditText.getText().toString().equals("")){
+                        nameEditText.setError("You must fill in your name for identification");
+                        nameEditText.requestFocus();
+                    }else if(isChoosePlace==false){
                         Toast.makeText(ListPlacesActivity.this,
                                 "You must choose one place", Toast.LENGTH_SHORT).show();
                     }

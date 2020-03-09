@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -24,13 +25,14 @@ import com.google.firebase.storage.StorageReference;
 import static java.lang.Thread.sleep;
 
 public class StartActivity extends AppCompatActivity {
+    private final String IS_CONNECTED="isConnected";
+    public static final String CHANNEL_ID = "simplified_coding";
+    private static final String CHANNEL_NAME = "Simplified Coding";
+    private static final String CHANNEL_DESC = "Simplified Coding Notifications";
     private Button customerBtn;
     private Button workerBtn;
     private Button aboutBtn;
     private ProgressBar progressBar;
-    public static final String CHANNEL_ID = "simplified_coding";
-    private static final String CHANNEL_NAME = "Simplified Coding";
-    private static final String CHANNEL_DESC = "Simplified Coding Notifications";
     public static FirebaseAuth mFireBaseAuth;
     public static DatabaseReference mDatabaseReferenceAuth;
     public static DatabaseReference mDatabaseReferencePlaces;
@@ -71,8 +73,9 @@ public class StartActivity extends AppCompatActivity {
         workerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(StartActivity.this,WorkerLogIn.class);
+                Intent intent = new Intent(StartActivity.this, WorkerLogIn.class);
                 startActivity(intent);
+
             }
         });
         aboutBtn.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +91,7 @@ public class StartActivity extends AppCompatActivity {
         mFireBaseAuth= FirebaseAuth.getInstance();
         mDatabaseReferenceAuth = FirebaseDatabase.getInstance().getReference("cellPhone");
         mDatabaseReferencePlaces = FirebaseDatabase.getInstance().getReference("places");
+        Log.d("im here", "initFirebase: ");
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
     }

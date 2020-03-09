@@ -1,9 +1,16 @@
 package com.example.helpme;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,11 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
 public class CustomerLogIn extends AppCompatActivity {
+    private static final int PERMISSION_REQUEST_CODE = 1;
     private Button logIn;
     private ProgressBar pb;
     private EditText cellPhoneNumberExists;
     private Spinner spinnerExists;
-    private boolean userExists =false;
+    private boolean userExists = false;
     private TextView createUserTextView;
     public static String completeNum;
 
@@ -43,7 +51,7 @@ public class CustomerLogIn extends AppCompatActivity {
         pb = (ProgressBar) findViewById(R.id.pb);
         pb.setVisibility(View.INVISIBLE);
         cellPhoneNumberExists = (EditText) findViewById(R.id.phone_num_exists);
-        createUserTextView=(TextView)findViewById(R.id.create_user);
+        createUserTextView = (TextView) findViewById(R.id.create_user);
     }
 
     private void initSpinner() {
@@ -72,7 +80,6 @@ public class CustomerLogIn extends AppCompatActivity {
                 createCellPhoneNumber();
                 pb.setVisibility(View.VISIBLE);
                 userExists();
-
             }
         });
     }

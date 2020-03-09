@@ -16,14 +16,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.okhttp.ResponseBody;
 
 import java.util.ArrayList;
@@ -45,6 +50,7 @@ public class CustomerMain extends AppCompatActivity {
     private final String PHONE_NUM="PhoneNum";
     private ImageView cameraBtn;
     private ImageView cameraAgain;
+    public static ProgressBar pbSendBtn;
     private Button sendBtn;
     private ImageView returnPhoto;
     private TextView name;
@@ -56,6 +62,7 @@ public class CustomerMain extends AppCompatActivity {
     private List<Employee> employeeList;
     private boolean photoExists=false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +71,18 @@ public class CustomerMain extends AppCompatActivity {
         getNameAndStoreFromCustomerMain();
         clickToTakeAPhoto();
         loadUsers();
-        sendAlertToWorker();
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(task.isSuccessful()){
+                    String token = task.getResult().getToken();
+                    sendAlertToWorker(token);
+                }
+                else
+                {}
+            }
+        });
+
     }
 
     private void initViews(){
@@ -77,6 +95,8 @@ public class CustomerMain extends AppCompatActivity {
         name=(TextView)findViewById(R.id.name_textView);
         place=(TextView)findViewById(R.id.place_name_textView);
         sendBtn.setVisibility(View.INVISIBLE);
+        pbSendBtn=findViewById(R.id.pb_sendBtn);
+        pbSendBtn.setVisibility(View.INVISIBLE);
     }
 
     private void loadUsers() {
@@ -168,14 +188,15 @@ public class CustomerMain extends AppCompatActivity {
         startActivityForResult(intent,IMAGE_CAPTURE_CODE);
     }
 
-    private void sendAlertToWorker() {
+    private void sendAlertToWorker(final String token) {
         sendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(photoExists && employeeList!=null) {
-                        currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri);
+                        currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri,token,StartActivity.mFireBaseAuth.getCurrentUser().getUid());
                         String title = "New Call";
-                        String body = "New call in " + currentPlace.getName() + " from " + name;
+                        String body = "New call in " + currentPlace.getName() + " from " + getIntent().getExtras().get(CUSTOMER_NAME);
+                        NotificationHelper.displayNotification(getApplicationContext(),title,body);
                         for(Employee e : employeeList){
                             String token = e.getToken();
                             Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/")
@@ -195,8 +216,8 @@ public class CustomerMain extends AppCompatActivity {
                                 }
                             });
                         }
-                        Toast.makeText(CustomerMain.this,
-                                "Your request has been sent", Toast.LENGTH_SHORT).show();
+                        sendBtn.setVisibility(View.INVISIBLE);
+                        pbSendBtn.setVisibility(View.VISIBLE);
                     }else{
                         Toast.makeText(CustomerMain.this,
                                 "You must take a photo", Toast.LENGTH_SHORT).show();
