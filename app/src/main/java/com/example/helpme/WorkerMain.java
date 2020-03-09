@@ -134,7 +134,7 @@ public class WorkerMain extends AppCompatActivity {
         }
         if(workPlace!=null)
             place.setText(STORE + workPlace.getName());
-        calls = new ArrayList<>();
+
     }
 
     private void createListView(){
@@ -143,18 +143,19 @@ public class WorkerMain extends AppCompatActivity {
             callsRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    calls = new ArrayList<>();
                     for (DataSnapshot post : dataSnapshot.getChildren()) {
                         String retrieveCellphoneNumber = dataSnapshot.child(post.getKey()).child(CUSTOMER_NUMBER).getValue().toString();
                         String retrievePic = dataSnapshot.child(post.getKey()).child(PIC).getValue().toString();
                         String retrieveToken = dataSnapshot.child(post.getKey()).child(TOKEN).getValue().toString();
                         String retrieveUid = dataSnapshot.child(post.getKey()).child(UID).getValue().toString();
-                        calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-//                        if (!dataSnapshot.child(retrieveCellphoneNumber).exists()) {
-//                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-//                        } else {
-//                            calls.remove(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-//                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
-//                        }
+//                        calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+                        if (!dataSnapshot.child(retrieveCellphoneNumber).exists()) {
+                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+                        } else {
+                            calls.remove(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+                            calls.add(new Call(retrieveCellphoneNumber, retrievePic,retrieveToken,retrieveUid));
+                        }
                     }
                     //create adapter
                      arrayAdapter =
@@ -203,7 +204,7 @@ public class WorkerMain extends AppCompatActivity {
                 removeCallFromDatabaseAndStorage(call);
 
                 calls.remove(call);//remove from list maybe we dont need this
-                createListView();
+//                createListView();
                 myDialog.cancel();
             }
         });
