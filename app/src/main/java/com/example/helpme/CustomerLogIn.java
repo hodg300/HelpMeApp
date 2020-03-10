@@ -112,6 +112,7 @@ public class CustomerLogIn extends AppCompatActivity {
                     pb.setVisibility(View.INVISIBLE);
                     Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
                     startActivity(intent);
+                    finish();
                 }else{
                     pb.setVisibility(View.INVISIBLE);
                     if(cellPhoneNumberExists !=null) {

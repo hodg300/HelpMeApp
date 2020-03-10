@@ -149,7 +149,8 @@ public class ListPlacesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ListPlacesActivity.this, StartActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(ListPlacesActivity.this, StartActivity.class);
+//        startActivity(intent);
+//        finish();
     }
 }
