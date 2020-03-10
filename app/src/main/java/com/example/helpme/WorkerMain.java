@@ -225,8 +225,8 @@ public class WorkerMain extends AppCompatActivity {
             Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/")
                     .addConverterFactory(GsonConverterFactory.create()).build();
             Api api = retrofit.create(Api.class);
-            api.sendNotification(new Sender(new Data(StartActivity.mFireBaseAuth.getCurrentUser().getUid(),
-                    R.drawable.helpmeicon ,body,title, call.getCallUid()),token)).enqueue(new Callback<ResponseBody>() {
+            api.sendNotification(new Sender(new Data(call.getCallUid(),
+                    R.drawable.helpmeicon ,body,title, StartActivity.mFireBaseAuth.getCurrentUser().getUid()),token)).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
                     if(response.code()==200)

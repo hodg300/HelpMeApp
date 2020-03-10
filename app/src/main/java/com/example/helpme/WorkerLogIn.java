@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -73,13 +74,14 @@ public class WorkerLogIn extends AppCompatActivity {
         });
     }
 
-        private void logIn() {
+    private void logIn() {
+
         connectEmp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 empMail = workerMail.getText().toString();
                 placeID = placeCode.getText().toString();
-                if (empMail != null && placeID != null) {
+                if (!empMail.equals("") && !placeID.equals("")) {
                     StartActivity.mFireBaseAuth.signInWithEmailAndPassword(empMail, placeID)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -93,6 +95,12 @@ public class WorkerLogIn extends AppCompatActivity {
                                         Toast.makeText(WorkerLogIn.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
+                } else if (empMail.equals("")) {
+                    workerMail.setError("Invalid email/code");
+                    workerMail.requestFocus();
+                }else if(placeID.equals("")){
+                    placeCode.setError("Invalid workplace code");
+                    placeCode.requestFocus();
                 }
             }
         });
@@ -102,8 +110,7 @@ public class WorkerLogIn extends AppCompatActivity {
             public void onClick(View v) {
                 empMail = workerMail.getText().toString();
                 placeID = placeCode.getText().toString();
-
-                if (empMail != null && placeID != null) {
+                if (!empMail.equals("") && !placeID.equals("")) {
                     for (WorkPlace p : places_worker.getArrayList()) {
                         if (p.getCode().equals(placeID)) {
                             if (p.getManager() != null) {
@@ -118,6 +125,12 @@ public class WorkerLogIn extends AppCompatActivity {
                             }
                         }
                     }
+                } else if (empMail.equals("")) {
+                    workerMail.setError("Invalid email/code");
+                    workerMail.requestFocus();
+                }else if(placeID.equals("")){
+                    placeCode.setError("Invalid workplace code");
+                    placeCode.requestFocus();
                 }
             }
         });
