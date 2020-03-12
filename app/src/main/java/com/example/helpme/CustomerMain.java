@@ -188,6 +188,7 @@ public class CustomerMain extends AppCompatActivity {
         startActivityForResult(intent,IMAGE_CAPTURE_CODE);
     }
 
+    //from customer to worker
     private void sendAlertToWorker(final String token) {
         sendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
