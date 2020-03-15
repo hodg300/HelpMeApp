@@ -36,11 +36,14 @@ public class WorkerLogIn extends AppCompatActivity {
     private Button connectMan;
     private String empMail;
     private String placeID;
+    public static PlaceFactory places_worker;
+    private ArrayList<WorkPlace> temp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_log_in);
         initViews();
+        initPlaces();
         logIn();
     }
 
@@ -49,9 +52,30 @@ public class WorkerLogIn extends AppCompatActivity {
         placeCode = (EditText) findViewById(R.id.workplaceCode);
         connectEmp = (Button) findViewById(R.id.workerConnectBTN);
         connectMan = (Button) findViewById(R.id.managerConnectBTN);
+        places_worker = new PlaceFactory();
+        temp = new ArrayList<>();
+    }
+
+    private void initPlaces() {
+        StartActivity.mDatabaseReferencePlaces.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot d : dataSnapshot.getChildren()){
+                    WorkPlace p = d.getValue(WorkPlace.class);
+                    temp.add(p);
+                }
+                places_worker.setArrayList(temp);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
 
     private void logIn() {
+
         connectEmp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +111,7 @@ public class WorkerLogIn extends AppCompatActivity {
                 empMail = workerMail.getText().toString();
                 placeID = placeCode.getText().toString();
                 if (!empMail.equals("") && !placeID.equals("")) {
-                    for (WorkPlace p : StartActivity.places.getArrayList()) {
+                    for (WorkPlace p : places_worker.getArrayList()) {
                         if (p.getCode().equals(placeID)) {
                             if (p.getManager() != null) {
                                 if (empMail.equals(p.getManager().getId())) {

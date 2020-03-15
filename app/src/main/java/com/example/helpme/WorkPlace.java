@@ -76,6 +76,7 @@ public class WorkPlace implements Comparable {
                                     public void onSuccess(Void aVoid) {
                                         Log.d("Wrokplace", "onComplete: isSeccessful");
                                         CustomerMain.pbSendBtn.setVisibility(View.INVISIBLE);
+                                        CustomerMain.cameraAgain.setVisibility(View.VISIBLE);
                                     }
                                 });
                     }

@@ -48,7 +48,7 @@ public class addEmpFreg extends Fragment {
     private Employee newEmp;
     private WorkPlace place;
     private String action;
-    private ManagerPage thisMannagerPage;
+    private ManagerPage thisManagerPage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,16 +111,17 @@ public class addEmpFreg extends Fragment {
                         newEmp = new Employee(name, mail, phone);
                         if (newEmp != null) {
                             place.addWorker(new Employee(name, mail, phone));
-                            StartActivity.mFireBaseAuth.createUserWithEmailAndPassword(mail, place.getCode()+mail).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            StartActivity.mFireBaseAuth.createUserWithEmailAndPassword(mail, place.getCode())
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful())
-                                        thisMannagerPage.successAdd();
+                                        thisManagerPage.successAdd();
                                     else {
                                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                            Toast.makeText(thisMannagerPage, "User exist", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(thisManagerPage, "User exist", Toast.LENGTH_LONG).show();
                                         } else
-                                            Toast.makeText(thisMannagerPage, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(thisManagerPage, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
@@ -141,13 +142,14 @@ public class addEmpFreg extends Fragment {
                     for (Employee e : place.getEmployees()) {
                         if (e != null) {
                             if (e.getId().equals(mail)) {
-                                StartActivity.mFireBaseAuth.signInWithEmailAndPassword(mail, thisMannagerPage.place.getCode())
+                                StartActivity.mFireBaseAuth.signInWithEmailAndPassword(mail, thisManagerPage.place.getCode())
                                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()) {
                                                     final FirebaseUser user = StartActivity.mFireBaseAuth.getCurrentUser();
-                                                    final DatabaseReference dbUsers = FirebaseDatabase.getInstance().getReference("places").child(thisMannagerPage.place.getName()).child("employees");
+                                                    final DatabaseReference dbUsers = FirebaseDatabase.getInstance()
+                                                            .getReference("places").child(thisManagerPage.place.getName()).child("employees");
                                                     dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                                                         @Override
                                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -169,12 +171,12 @@ public class addEmpFreg extends Fragment {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     if (task.isSuccessful()) {
-                                                                        thisMannagerPage.successDell();
+                                                                        thisManagerPage.successDell();
                                                                     }
                                                                 }
                                                             });
                                                 } else
-                                                    Toast.makeText(thisMannagerPage, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(thisManagerPage, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                             }
                                         });
                                 return;
@@ -182,7 +184,7 @@ public class addEmpFreg extends Fragment {
                         }
                     }
                 }
-                thisMannagerPage.faileDell();
+                thisManagerPage.faileDell();
             }
         });
     }
@@ -214,17 +216,17 @@ public class addEmpFreg extends Fragment {
 
     private boolean checkValidation() {
         if (phoneTXT.getText().toString().length() < 10){
-            thisMannagerPage.failedAdd();
+            thisManagerPage.failedAdd();
             return false;
         }
         if(place.getEmployees()!=null) {
             for (Employee e : this.place.getEmployees()) {
                 if (e.getId().equals(MAILTXT.getText().toString())) {
-                    thisMannagerPage.failedAddId();
+                    thisManagerPage.failedAddId();
                     return false;
                 }
                 if (e.getPhone().equals("+972" + phoneTXT.getText().toString().substring(1))) {
-                    thisMannagerPage.failedAddPhone();
+                    thisManagerPage.failedAddPhone();
                     return false;
                 }
             }
@@ -240,8 +242,8 @@ public class addEmpFreg extends Fragment {
         return newEmp;
     }
 
-    public void setThisMannagerPage(ManagerPage thisPage) {
-        this.thisMannagerPage = thisPage;
+    public void setThisManagerPage(ManagerPage thisPage) {
+        this.thisManagerPage = thisPage;
     }
 
 }

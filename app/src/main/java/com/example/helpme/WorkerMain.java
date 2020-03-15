@@ -128,7 +128,7 @@ public class WorkerMain extends AppCompatActivity {
         String placeID = getIntent().getStringExtra(WORK_PLACE);
 
         //found right place
-        for(WorkPlace p : StartActivity.places.getArrayList()){
+        for(WorkPlace p : WorkerLogIn.places_worker.getArrayList()){
             if (p.getCode().equals(placeID))
                 workPlace = p;
         }
@@ -220,7 +220,6 @@ public class WorkerMain extends AppCompatActivity {
 
     private void sendAlertToCustomer(String title , String body) {
 
-        NotificationHelper.displayNotification(getApplicationContext(),title,body);
             String token = call.getToken();
             Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/")
                     .addConverterFactory(GsonConverterFactory.create()).build();
@@ -259,6 +258,7 @@ public class WorkerMain extends AppCompatActivity {
         Toast.makeText(this, R.string.logOutMessage, Toast.LENGTH_SHORT).show();
         if(counter==2){
             super.onBackPressed();
+            StartActivity.mFireBaseAuth.signOut();
         }
     }
 }

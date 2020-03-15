@@ -1,5 +1,6 @@
 package com.example.helpme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,6 +20,10 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -95,6 +100,7 @@ public class CustomerLogIn extends AppCompatActivity {
     }
 
     private void userExists(){
+
         StartActivity.mDatabaseReferenceAuth.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -104,15 +110,19 @@ public class CustomerLogIn extends AppCompatActivity {
                 for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
                     if (mDataSnapshot1.getValue().toString().equals(completeNum)) {
                         userExists = true;
-//                            CustomerLogIn.completeNum = StartActivity.mFireBaseAuth.getCurrentUser().getPhoneNumber();
                     }
                 }
 
                 if(userExists) {
                     pb.setVisibility(View.INVISIBLE);
-                    Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
-                    startActivity(intent);
-                    finish();
+                    StartActivity.mFireBaseAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
                 }else{
                     pb.setVisibility(View.INVISIBLE);
                     if(cellPhoneNumberExists !=null) {

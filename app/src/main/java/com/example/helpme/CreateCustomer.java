@@ -84,7 +84,7 @@ public class CreateCustomer extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createCellPhoneNumber();
-//                userExists();
+                cellPhoneNumber.setEnabled(false);
                 sendVerificationCode(CustomerLogIn.completeNum);
                 send_verification_Btn.setEnabled(false);
                 send_verification_Btn.setVisibility(View.INVISIBLE);
@@ -109,33 +109,6 @@ public class CreateCustomer extends AppCompatActivity {
 
     }
 
-//    private void userExists(){
-//        StartActivity.mDatabaseReferenceAuth.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//
-//                    for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
-//                        Log.d(TAG, "onDataChange: " + mDataSnapshot1 + "    "  + completeNum);
-//                        if (mDataSnapshot1.getValue().toString().equals(completeNum)) {
-//                            userExists = true;
-////                            CustomerLogIn.completeNum = StartActivity.mFireBaseAuth.getCurrentUser().getPhoneNumber();
-//                        }
-//                    }
-//
-//                if(userExists) {
-////                    progressBar.setVisibility(View.INVISIBLE);
-//                    Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
-//                    startActivity(intent);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//            }
-//        });
-//    }
 
     private void verifyCode(String code){
         PhoneAuthCredential mPhoneAuthCredential=PhoneAuthProvider.getCredential(mVerificationId,code);
