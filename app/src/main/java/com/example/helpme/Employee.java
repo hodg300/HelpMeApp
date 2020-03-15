@@ -2,6 +2,13 @@ package com.example.helpme;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import java.io.Serializable;
 
 public class Employee implements Serializable {
@@ -17,6 +24,17 @@ public class Employee implements Serializable {
         this.name = name;
         this.id = mail;
         this.phone = phone;
+        //token of employee
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(task.isSuccessful()){
+                    token = task.getResult().getToken();
+                }
+                else
+                {}
+            }
+        });
     }
 
     public Employee(String mail, String token) {

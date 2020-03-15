@@ -128,7 +128,7 @@ public class WorkerMain extends AppCompatActivity {
         String placeID = getIntent().getStringExtra(WORK_PLACE);
 
         //found right place
-        for(WorkPlace p : WorkerLogIn.places_worker.getArrayList()){
+        for(WorkPlace p : StartActivity.places.getArrayList()){
             if (p.getCode().equals(placeID))
                 workPlace = p;
         }

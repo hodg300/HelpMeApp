@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -22,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+
 import static java.lang.Thread.sleep;
 
 public class StartActivity extends AppCompatActivity {
@@ -32,6 +35,7 @@ public class StartActivity extends AppCompatActivity {
     private Button customerBtn;
     private Button workerBtn;
     private Button aboutBtn;
+    public static PlaceFactory places;
     private ProgressBar progressBar;
     public static FirebaseAuth mFireBaseAuth;
     public static DatabaseReference mDatabaseReferenceAuth;
@@ -39,6 +43,12 @@ public class StartActivity extends AppCompatActivity {
     public static FirebaseStorage storage;
     public static StorageReference storageRef;
     private boolean userExists=false;
+    public interface DataStatus{
+        void DataIsLoaded(ArrayList<WorkPlace> places);
+        void DataIsInserted();
+        void DataIsUpdated();
+        void DataIsDeleted();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +62,50 @@ public class StartActivity extends AppCompatActivity {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
+        startInitPlaces();
         startIntents();
+    }
+
+    private void startInitPlaces(){
+        initPlaces(new StartActivity.DataStatus() {
+            @Override
+            public void DataIsLoaded(ArrayList<WorkPlace> places) {
+                StartActivity.places.setArrayList(places);
+            }
+
+            @Override
+            public void DataIsInserted() {
+
+            }
+
+            @Override
+            public void DataIsUpdated() {
+
+            }
+
+            @Override
+            public void DataIsDeleted() {
+
+            }
+        });
+    }
+
+    private void initPlaces(final DataStatus dataStatus) {
+        mDatabaseReferencePlaces.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<WorkPlace> temp = new ArrayList<>();
+                for(DataSnapshot d : dataSnapshot.getChildren()){
+                    WorkPlace p = d.getValue(WorkPlace.class);
+                    temp.add(p);
+                }
+                dataStatus.DataIsLoaded(temp);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
 
     private void initViews(){
@@ -61,6 +114,7 @@ public class StartActivity extends AppCompatActivity {
         customerBtn=(Button)findViewById(R.id.customerBTN);
         workerBtn=(Button)findViewById(R.id.workerBTN);
         aboutBtn=(Button)findViewById(R.id.aboutBTN);
+        places = new PlaceFactory();
     }
 
     private void startIntents(){
@@ -75,7 +129,6 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(StartActivity.this, WorkerLogIn.class);
                 startActivity(intent);
-
             }
         });
         aboutBtn.setOnClickListener(new View.OnClickListener() {

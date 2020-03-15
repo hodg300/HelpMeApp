@@ -71,6 +71,7 @@ public class CustomerMain extends AppCompatActivity {
         getNameAndStoreFromCustomerMain();
         clickToTakeAPhoto();
         loadUsers();
+        //token of customer
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -135,7 +136,7 @@ public class CustomerMain extends AppCompatActivity {
     private void getNameAndStoreFromCustomerMain(){
         intentName=getIntent().getStringExtra(CUSTOMER_NAME);
         intentPlace=getIntent().getStringExtra(NAME_OF_PLACE);
-        for(WorkPlace p : ListPlacesActivity.places.getArrayList()){
+        for(WorkPlace p : StartActivity.places.getArrayList()){
             if(p.getName().equals(intentPlace))
                 currentPlace = p;
         }
@@ -198,13 +199,14 @@ public class CustomerMain extends AppCompatActivity {
                         String title = "New Call";
                         String body = "New call in " + currentPlace.getName() + " from " + getIntent().getExtras().get(CUSTOMER_NAME);
                         NotificationHelper.displayNotification(getApplicationContext(),title,body);
+                        
                         for(Employee e : employeeList){
-                            String token = e.getToken();
+                            String tokenEmp = e.getToken();
                             Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/")
                                     .addConverterFactory(GsonConverterFactory.create()).build();
                             Api api = retrofit.create(Api.class);
                             api.sendNotification(new Sender(new Data(StartActivity.mFireBaseAuth.getCurrentUser().getUid(),
-                                    R.drawable.helpmeicon ,body,title, e.getUid()),token)).enqueue(new Callback<ResponseBody>() {
+                                    R.drawable.helpmeicon ,body,title, e.getUid()),tokenEmp)).enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if(response.code()==200)
@@ -244,5 +246,6 @@ public class CustomerMain extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        StartActivity.mFireBaseAuth.signOut();
     }
 }
