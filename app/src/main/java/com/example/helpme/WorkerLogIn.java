@@ -37,7 +37,7 @@ public class WorkerLogIn extends AppCompatActivity {
     private String empMail;
     private String placeID;
     public static PlaceFactory places_worker;
-    private ArrayList<WorkPlace> temp;
+    private ArrayList<WorkPlace> workPlaces;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,19 +53,19 @@ public class WorkerLogIn extends AppCompatActivity {
         connectEmp = (Button) findViewById(R.id.workerConnectBTN);
         connectMan = (Button) findViewById(R.id.managerConnectBTN);
         places_worker = new PlaceFactory();
-        temp = new ArrayList<>();
+        workPlaces = new ArrayList<>();
     }
 
     private void initPlaces() {
-        StartActivity.mDatabaseReferencePlaces.addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("places").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     WorkPlace p = d.getValue(WorkPlace.class);
-                    temp.add(p);
+                    workPlaces.add(p);
                 }
-                places_worker.setArrayList(temp);
+                places_worker.setArrayList(workPlaces);
             }
 
             @Override

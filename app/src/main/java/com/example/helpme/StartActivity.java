@@ -25,14 +25,13 @@ import com.google.firebase.storage.StorageReference;
 import static java.lang.Thread.sleep;
 
 public class StartActivity extends AppCompatActivity {
-    private final String IS_CONNECTED="isConnected";
+    private final String CELL_PHONE="cellPhone";
+    public final String PLACES="places";
     public static final String CHANNEL_ID = "simplified_coding";
     private static final String CHANNEL_NAME = "Simplified Coding";
     private static final String CHANNEL_DESC = "Simplified Coding Notifications";
     private Button customerBtn;
     private Button workerBtn;
-    private Button aboutBtn;
-    private ProgressBar progressBar;
     public static FirebaseAuth mFireBaseAuth;
     public static DatabaseReference mDatabaseReferenceAuth;
     public static DatabaseReference mDatabaseReferencePlaces;
@@ -46,18 +45,22 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initFirebase();
         initViews();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel  = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(CHANNEL_DESC);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
+        initNotification();
         startIntents();
     }
 
     private void initViews(){
         customerBtn=(Button)findViewById(R.id.customerBTN);
         workerBtn=(Button)findViewById(R.id.workerBTN);
+    }
+
+    private void initNotification(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel  = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(CHANNEL_DESC);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
     }
 
     private void startIntents(){
@@ -79,9 +82,8 @@ public class StartActivity extends AppCompatActivity {
 
     private void initFirebase(){
         mFireBaseAuth= FirebaseAuth.getInstance();
-        mDatabaseReferenceAuth = FirebaseDatabase.getInstance().getReference("cellPhone");
-        mDatabaseReferencePlaces = FirebaseDatabase.getInstance().getReference("places");
-        Log.d("im here", "initFirebase: ");
+        mDatabaseReferenceAuth = FirebaseDatabase.getInstance().getReference(CELL_PHONE);
+        mDatabaseReferencePlaces = FirebaseDatabase.getInstance().getReference(PLACES);
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
     }
