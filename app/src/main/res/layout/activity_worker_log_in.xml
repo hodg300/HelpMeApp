@@ -60,6 +60,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
+
         </LinearLayout>
 
     <Button
@@ -80,6 +81,13 @@
         android:layout_marginTop="60dp"
         android:layout_above="@+id/managerConnectBTN"
         android:text="Worker Page" />
+
+    <ProgressBar
+        android:id="@+id/workerLogIn_pb"
+        android:layout_below="@id/managerConnectBTN"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"/>
 
 
 

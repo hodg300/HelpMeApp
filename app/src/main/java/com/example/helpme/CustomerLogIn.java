@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,13 +19,13 @@ public class CustomerLogIn extends AppCompatActivity {
     private TextView createUserTextView;
     private EditText mailOfCustomer;
     private EditText password;
+    private ProgressBar pbCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_log_in);
         initViews();
-
         logIn();
         createUser();
     }
@@ -33,7 +34,9 @@ public class CustomerLogIn extends AppCompatActivity {
         mailOfCustomer=findViewById(R.id.mail_of_customer);
         password=findViewById(R.id.password);
         logIn = findViewById(R.id.login_btn);
+        pbCustomer = findViewById(R.id.customerLogIn_pb);
         createUserTextView = (TextView) findViewById(R.id.create_user);
+        pbCustomer.setVisibility(View.INVISIBLE);
     }
 
     private void logIn() {
@@ -56,10 +59,10 @@ public class CustomerLogIn extends AppCompatActivity {
         });
     }
 
-    private void userExists(){
+    private void userExists() {
+        pbCustomer.setVisibility(View.VISIBLE);
         String mail=mailOfCustomer.getText().toString().trim();
         String cus_password=password.getText().toString();
-
         if(mail.isEmpty()){
             mailOfCustomer.setError("Invalid email");
             mailOfCustomer.requestFocus();
@@ -82,5 +85,6 @@ public class CustomerLogIn extends AppCompatActivity {
                         }
                     });
         }
+        pbCustomer.setVisibility(View.INVISIBLE);
     }
 }

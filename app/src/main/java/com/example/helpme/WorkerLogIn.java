@@ -36,6 +36,7 @@ public class WorkerLogIn extends AppCompatActivity {
     private Button connectMan;
     private String empMail;
     private String placeID;
+    private ProgressBar pbWorker;
     public static PlaceFactory places_worker;
     private ArrayList<WorkPlace> workPlaces;
     private boolean isFindPlace =false;
@@ -49,12 +50,14 @@ public class WorkerLogIn extends AppCompatActivity {
     }
 
     private void initViews() {
+        pbWorker = (ProgressBar) findViewById(R.id.workerLogIn_pb);
         workerMail= (EditText) findViewById(R.id.workerEditMail);
         placeCode = (EditText) findViewById(R.id.workplaceCode);
         connectEmp = (Button) findViewById(R.id.workerConnectBTN);
         connectMan = (Button) findViewById(R.id.managerConnectBTN);
         places_worker = new PlaceFactory();
         workPlaces = new ArrayList<>();
+        pbWorker.setVisibility(View.INVISIBLE);
     }
 
     private void initPlaces() {
@@ -76,10 +79,10 @@ public class WorkerLogIn extends AppCompatActivity {
     }
 
     private void logIn() {
-
         connectEmp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pbWorker.setVisibility(View.VISIBLE);
                 empMail = workerMail.getText().toString().trim();
                 placeID = placeCode.getText().toString().trim();
                 if (!empMail.equals("") && !placeID.equals("")) {
@@ -88,12 +91,16 @@ public class WorkerLogIn extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        pbWorker.setVisibility(View.INVISIBLE);
                                         Intent intent = new Intent(WorkerLogIn.this, WorkerMain.class);
                                         intent.putExtra(WORK_PLACE, placeID);
                                         intent.putExtra(EMPLOYEE, empMail);
                                         startActivity(intent);
-                                    } else
-                                        Toast.makeText(WorkerLogIn.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(WorkerLogIn.this,
+                                                task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        pbWorker.setVisibility(View.INVISIBLE);
+                                    }
                                 }
                             });
                 } else if (empMail.equals("")) {
@@ -103,6 +110,7 @@ public class WorkerLogIn extends AppCompatActivity {
                     placeCode.setError("Invalid workplace code");
                     placeCode.requestFocus();
                 }
+
             }
         });
 

@@ -24,12 +24,12 @@
 
     <Button
         android:id="@+id/customerBTN"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:text="CUSTOMER"
         android:background="@drawable/button_confirm2"
-        android:layout_margin="20dp"
-        android:textSize="20dp"
+        android:layout_margin="10dp"
+        android:textSize="15dp"
         android:textColor="@android:color/black"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
@@ -37,15 +37,16 @@
 
     <Button
         android:id="@+id/workerBTN"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="150dp"
+        android:outlineSpotShadowColor="@android:color/white"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_below="@id/customerBTN"
-        android:background="@drawable/button_confirm"
+        android:background="@drawable/button_round"
         android:text="WORKER"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textColor="@android:color/black"
         tools:ignore="MissingConstraints" />
 

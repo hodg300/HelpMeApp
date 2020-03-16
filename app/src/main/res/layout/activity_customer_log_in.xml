@@ -80,7 +80,17 @@
             android:textStyle="bold"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimary"/>
+
+        <ProgressBar
+            android:id="@+id/customerLogIn_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="150dp"
+             />
     </LinearLayout>
+
+
 
 
 

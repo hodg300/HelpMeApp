@@ -223,8 +223,8 @@ public class WorkerMain extends AppCompatActivity {
     }
 
     private void sendAlertToCustomer(String title , String body) {
-            MyFirebaseMessagingService.setTitle("New Call");
-            MyFirebaseMessagingService.setBody("There is a new call in " + workPlace.getName());
+            MyFirebaseMessagingService.setTitle(title);
+            MyFirebaseMessagingService.setBody(body);
             String token = call.getToken();
             Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/")
                     .addConverterFactory(GsonConverterFactory.create()).build();
