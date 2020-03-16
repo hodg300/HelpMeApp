@@ -48,7 +48,6 @@ public class CustomerMain extends AppCompatActivity {
     private final String PLACE="Place: ";
     private final String CUSTOMER_NAME="customerName";
     private final String NAME_OF_PLACE="nameOfPlace";
-    private final String PHONE_NUM="PhoneNum";
     private ImageView cameraBtn;
     public static ImageView cameraAgain;
     public static ProgressBar pbSendBtn;

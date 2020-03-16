@@ -72,14 +72,11 @@ public class WorkerMain extends AppCompatActivity {
     public final String UID="callUid";
     public final String TITLE = "New Call";
     public final String BODY = "There is a new call in ";
-    private final String HI="Hi ";
     private final String STORE="Store: ";
     private TextView name;
     private TextView place;
-    private ImageView image;
     private WorkPlace workPlace;
     private ListView callsList;
-    private StorageReference listRef;
     private DatabaseReference callsRef;
     private ArrayList<Call> calls;
     private Call call;

@@ -1,31 +1,17 @@
 package com.example.helpme;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Picture;
-import android.graphics.drawable.BitmapDrawable;
+
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 public class WorkPlace implements Comparable {
     private final String UPLOADS = "Uploads";
