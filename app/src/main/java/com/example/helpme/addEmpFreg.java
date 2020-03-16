@@ -130,7 +130,11 @@ public class addEmpFreg extends Fragment {
             @Override
             public void onClick(View v) {
                 mail = mailEditText.getText().toString();
-                phone = phoneEditText.getText().toString();
+                if (mail.isEmpty()) {
+                    mailEditText.setError("Email required");
+                    mailEditText.requestFocus();
+                    return;
+                }
                 if (place.getEmployees() != null) {
                     for (Employee e : place.getEmployees()) {
                         if (e != null) {
@@ -172,12 +176,15 @@ public class addEmpFreg extends Fragment {
                                                     Toast.makeText(thisManagerPage, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                             }
                                         });
+                                mailEditText.setText("");
                                 return;
                             }
+
                         }
                     }
+                    thisManagerPage.faileDell();
                 }
-                thisManagerPage.faileDell();
+                thisManagerPage.listOfEmployeesIsEmpty();
             }
         });
     }
@@ -197,7 +204,7 @@ public class addEmpFreg extends Fragment {
         if(this.action.equals(DELETE)){
             nameEditText.setVisibility(View.INVISIBLE);
             mailEditText.setVisibility((View.VISIBLE));
-            phoneEditText.setVisibility(View.VISIBLE);
+            phoneEditText.setVisibility(View.INVISIBLE);
             addEmpBTN.setVisibility(View.INVISIBLE);
             delEmpBTN.setVisibility(View.VISIBLE);
             nameEditText.setText("");

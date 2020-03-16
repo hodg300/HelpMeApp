@@ -115,14 +115,10 @@ public class CustomerLogIn extends AppCompatActivity {
 
                 if(userExists) {
                     pb.setVisibility(View.INVISIBLE);
-                    StartActivity.mFireBaseAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
+                    StartActivity.mFireBaseAuth.signInAnonymously();
+                    Intent intent = new Intent(CustomerLogIn.this, ListPlacesActivity.class);
+                    startActivity(intent);
+                    finish();
                 }else{
                     pb.setVisibility(View.INVISIBLE);
                     if(cellPhoneNumberExists !=null) {

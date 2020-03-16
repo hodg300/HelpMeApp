@@ -64,6 +64,11 @@ public class ManagerPage extends AppCompatActivity {
                 "Phone Number already exists", Toast.LENGTH_LONG).show();
     }
 
+    public void listOfEmployeesIsEmpty(){
+        Toast.makeText(getApplicationContext(),
+                "List of employees is empty", Toast.LENGTH_LONG).show();
+    }
+
     private void initClicks() {
         updateEmp.setOnClickListener(new View.OnClickListener() {
             @Override

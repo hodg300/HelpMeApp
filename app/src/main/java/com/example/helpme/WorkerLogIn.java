@@ -38,6 +38,7 @@ public class WorkerLogIn extends AppCompatActivity {
     private String placeID;
     public static PlaceFactory places_worker;
     private ArrayList<WorkPlace> workPlaces;
+    private boolean isFindPlace =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +80,8 @@ public class WorkerLogIn extends AppCompatActivity {
         connectEmp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                empMail = workerMail.getText().toString();
-                placeID = placeCode.getText().toString();
+                empMail = workerMail.getText().toString().trim();
+                placeID = placeCode.getText().toString().trim();
                 if (!empMail.equals("") && !placeID.equals("")) {
                     StartActivity.mFireBaseAuth.signInWithEmailAndPassword(empMail, placeID)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -96,7 +97,7 @@ public class WorkerLogIn extends AppCompatActivity {
                                 }
                             });
                 } else if (empMail.equals("")) {
-                    workerMail.setError("Invalid email/code");
+                    workerMail.setError("Invalid email");
                     workerMail.requestFocus();
                 }else if(placeID.equals("")){
                     placeCode.setError("Invalid workplace code");
@@ -113,6 +114,7 @@ public class WorkerLogIn extends AppCompatActivity {
                 if (!empMail.equals("") && !placeID.equals("")) {
                     for (WorkPlace p : places_worker.getArrayList()) {
                         if (p.getCode().equals(placeID)) {
+                            isFindPlace=true;
                             if (p.getManager() != null) {
                                 if (empMail.equals(p.getManager().getId())) {
                                     Toast.makeText(getApplicationContext(),
@@ -125,10 +127,16 @@ public class WorkerLogIn extends AppCompatActivity {
                             }
                         }
                     }
-                } else if (empMail.equals("")) {
-                    workerMail.setError("Invalid email/code");
+                    if(!isFindPlace){
+                        Toast.makeText(getApplicationContext(),
+                                "Email or workplace code is wrong", Toast.LENGTH_LONG).show();
+                    }
+                }
+                if (empMail.equals("")) {
+                    workerMail.setError("Invalid email");
                     workerMail.requestFocus();
-                }else if(placeID.equals("")){
+                }
+                if(placeID.equals("")){
                     placeCode.setError("Invalid workplace code");
                     placeCode.requestFocus();
                 }
