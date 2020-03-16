@@ -258,7 +258,7 @@ public class WorkerMain extends AppCompatActivity {
     private void logOut(){
         final FirebaseUser user = StartActivity.mFireBaseAuth.getCurrentUser();
         final DatabaseReference dbUsers = FirebaseDatabase.getInstance()
-                .getReference().child(workPlace.getName()).child(EMPLOYEES);
+                .getReference().child(PLACES).child(workPlace.getName()).child(EMPLOYEES);
         dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
