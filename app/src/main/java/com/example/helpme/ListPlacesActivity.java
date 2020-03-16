@@ -37,6 +37,7 @@ public class ListPlacesActivity extends AppCompatActivity {
     private TextView nameEditText;
     public static PlaceFactory places;
     private Button confirmBtn;
+    public static boolean userInTheSystem=false;
     public interface DataStatus{
         void DataIsLoaded(ArrayList<WorkPlace> places);
         void DataIsInserted();
@@ -55,6 +56,7 @@ public class ListPlacesActivity extends AppCompatActivity {
     }
 
     private void init(){
+        userInTheSystem=true;
         confirmBtn=(Button) findViewById(R.id.loginConfirmBtn);
         nameEditText=(EditText)findViewById(R.id.customerEditName);
         listView=(ListView)findViewById(R.id.listView);

@@ -72,17 +72,7 @@ public class CustomerMain extends AppCompatActivity {
         getNameAndStoreFromCustomerMain();
         clickToTakeAPhoto();
         loadUsers();
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if(task.isSuccessful()){
-                    String token = task.getResult().getToken();
-                    sendAlertToWorker(token);
-                }
-                else
-                {}
-            }
-        });
+        createTokenAndSendAlertToWorker();
 
     }
 
@@ -100,6 +90,19 @@ public class CustomerMain extends AppCompatActivity {
         pbSendBtn.setVisibility(View.INVISIBLE);
     }
 
+    private void createTokenAndSendAlertToWorker(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(task.isSuccessful()){
+                    String token = task.getResult().getToken();
+                    sendAlertToWorker(token);
+                }
+                else
+                {}
+            }
+        });
+    }
     private void loadUsers() {
         employeeList = new ArrayList<>();
         final DatabaseReference dbUsers = FirebaseDatabase.getInstance().getReference("places").child(currentPlace.getName()).child("employees");
@@ -113,6 +116,7 @@ public class CustomerMain extends AppCompatActivity {
                         employeeList.add(employee);
                     }
                 }
+                Log.d("checkEmployees", "onDataChange: " + employeeList);
             }
 
             @Override
@@ -196,11 +200,12 @@ public class CustomerMain extends AppCompatActivity {
                 public void onClick(View view) {
                     cameraAgain.setVisibility(View.INVISIBLE);
                     if(photoExists && employeeList!=null) {
-                        currentPlace.addCall(CustomerLogIn.completeNum,returnPhoto, imageUri,token,StartActivity.mFireBaseAuth.getCurrentUser().getUid());
-                        String title = "New Call";
-                        String body = "New call in " + currentPlace.getName() + " from " + getIntent().getExtras().get(CUSTOMER_NAME);
+                        currentPlace.addCall(StartActivity.mFireBaseAuth.getCurrentUser().getEmail(),returnPhoto, imageUri,token,StartActivity.mFireBaseAuth.getCurrentUser().getUid());
+                        String title = "On My Way";
+                        String body = "The employee comes to you in a few moments";
+                        MyFirebaseMessagingService.setTitle(title);
+                        MyFirebaseMessagingService.setBody(body);
                         for(Employee e : employeeList) {
-                            if(FirebaseAuth.getInstance().isSignInWithEmailLink(e.getId())){
                                 String token = e.getToken();
                                 Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/")
                                         .addConverterFactory(GsonConverterFactory.create()).build();
@@ -219,7 +224,7 @@ public class CustomerMain extends AppCompatActivity {
 
                                     }
                                 });
-                        }
+
                         }
                         sendBtn.setVisibility(View.INVISIBLE);
                         pbSendBtn.setVisibility(View.VISIBLE);

@@ -25,8 +25,8 @@ import com.google.firebase.storage.StorageReference;
 import static java.lang.Thread.sleep;
 
 public class StartActivity extends AppCompatActivity {
-    private final String CELL_PHONE="cellPhone";
-    public final String PLACES="places";
+    private final String CELL_PHONE = "cellPhone";
+    public final String PLACES = "places";
     public static final String CHANNEL_ID = "simplified_coding";
     private static final String CHANNEL_NAME = "Simplified Coding";
     private static final String CHANNEL_DESC = "Simplified Coding Notifications";
@@ -37,7 +37,7 @@ public class StartActivity extends AppCompatActivity {
     public static DatabaseReference mDatabaseReferencePlaces;
     public static FirebaseStorage storage;
     public static StorageReference storageRef;
-    private boolean userExists=false;
+    private boolean userExists = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +49,21 @@ public class StartActivity extends AppCompatActivity {
         startIntents();
     }
 
-    private void initViews(){
-        customerBtn=(Button)findViewById(R.id.customerBTN);
-        workerBtn=(Button)findViewById(R.id.workerBTN);
+    private void initViews() {
+        customerBtn = (Button) findViewById(R.id.customerBTN);
+        workerBtn = (Button) findViewById(R.id.workerBTN);
     }
 
-    private void initNotification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel  = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+    private void initNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(CHANNEL_DESC);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
     }
 
-    private void startIntents(){
+    private void startIntents() {
         customerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,8 +80,8 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
-    private void initFirebase(){
-        mFireBaseAuth= FirebaseAuth.getInstance();
+    private void initFirebase() {
+        mFireBaseAuth = FirebaseAuth.getInstance();
         mDatabaseReferenceAuth = FirebaseDatabase.getInstance().getReference(CELL_PHONE);
         mDatabaseReferencePlaces = FirebaseDatabase.getInstance().getReference(PLACES);
         storage = FirebaseStorage.getInstance();
@@ -89,34 +89,19 @@ public class StartActivity extends AppCompatActivity {
     }
 
 
-    private void userExists(){
-        mDatabaseReferenceAuth.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                if (CustomerLogIn.completeNum != null) {
-                    for (DataSnapshot mDataSnapshot1 : dataSnapshot.getChildren()) {
-                        if (mDataSnapshot1.getValue().toString().equals(CustomerLogIn.completeNum)) {
-                            userExists = true;
-                        }
-                    }
-                }
-                if(!userExists) {
-                    Intent intent = new Intent(StartActivity.this, CustomerLogIn.class);
-                    startActivity(intent);
-                }else if(userExists){
-                    Toast.makeText(getApplicationContext(),
-                            "User exists...login succeeded", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(StartActivity.this, ListPlacesActivity.class);
-                    startActivity(intent);
-                }
-            }
+    private void userExists() {
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        if (!ListPlacesActivity.userInTheSystem) {
+            Intent intent = new Intent(StartActivity.this, CustomerLogIn.class);
+            startActivity(intent);
+        } else{
+            Toast.makeText(getApplicationContext(),
+                    "User exists...login succeeded", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(StartActivity.this, ListPlacesActivity.class);
+            startActivity(intent);
+        }
     }
+
+
 
 }
